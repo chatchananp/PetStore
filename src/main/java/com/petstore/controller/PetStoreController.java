@@ -41,7 +41,7 @@ public class PetStoreController {
 	}
 
 	@GetMapping(value = "/pet/{id}")
-	public ResponseEntity<Optional<PetDTO>> getPetById(@PathVariable(name = "id") Long petId) {
+	public ResponseEntity<PetDTO> getPetById(@PathVariable(name = "id") Long petId) {
 		return ResponseEntity.ok().body(petStoreService.getPetById(petId));
 	}
 

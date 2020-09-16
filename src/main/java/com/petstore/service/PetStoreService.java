@@ -43,7 +43,7 @@ public class PetStoreService {
 				.collect(Collectors.toList());
 	}
 	
-	public PetDTO getPetByIdd(Long petId) {
+	public PetDTO getPetById(Long petId) {
 		return convertToPetDTO(petRepo.findById(petId).get());
 	}
 	
