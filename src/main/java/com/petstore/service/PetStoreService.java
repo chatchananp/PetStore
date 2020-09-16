@@ -43,8 +43,8 @@ public class PetStoreService {
 				.collect(Collectors.toList());
 	}
 	
-	public Optional<PetDTO> getPetById(Long petId) {
-		return petRepo.findById(petId).map(this::convertToPetDTO);
+	public PetDTO getPetByIdd(Long petId) {
+		return convertToPetDTO(petRepo.findById(petId).get());
 	}
 	
 	public Stream<PetDTO> getPetByStatus(Status status) {
