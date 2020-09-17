@@ -3,7 +3,6 @@ package com.petstore.controller;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 import javax.validation.Valid;
 
@@ -48,7 +47,7 @@ public class PetStoreController {
 	}
 
 	@GetMapping(value = "/pet/status/{status}")
-	public ResponseEntity<Stream<PetDTO>> getPetByStatus(@PathVariable(name = "status") String status) {
+	public ResponseEntity<List<PetDTO>> getPetByStatus(@PathVariable(name = "status") String status) {
 		return ResponseEntity.ok().body(petStoreService.getPetByStatus(status));
 	}
 

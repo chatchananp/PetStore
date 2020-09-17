@@ -47,8 +47,8 @@ public class PetStoreService {
 				.orElseThrow(() -> new ResourceNotFoundException(PET_NOT_FOUND + petId)));
 	}
 
-	public Stream<PetDTO> getPetByStatus(String status) {
-		return petRepo.findByPetStatus(status).stream().map(this::convertToPetDTO);
+	public List<PetDTO> getPetByStatus(String status) {
+		return petRepo.findByPetStatus(status).stream().map(this::convertToPetDTO).collect(Collectors.toList());
 	}
 
 	public PetDTO updatePet(Long petId, PetDTO petDTO) throws ResourceNotFoundException {
