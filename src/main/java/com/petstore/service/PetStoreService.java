@@ -82,8 +82,11 @@ public class PetStoreService {
 		petPhotoRepo.save(photoFile);
 	}
 
-	public Optional<PhotoDTO> getPetPhotoById(Long petId, Long photoId) {
-		return petPhotoRepo.findByPetIdAndPhotoId(petId, photoId).map(this::convertToPhotoDTO);
+	public Optional<PhotoDTO> getPetPhotoById(Long petId, Long photoId) throws ResourceNotFoundException {
+		PetDTO pickedPet = convertToPetDTO(petRepo.findById(petId)
+				.orElseThrow(() -> new ResourceNotFoundException(PET_NOT_FOUND + petId)));
+		
+		return petPhotoRepo.findByPetIdAndPhotoId(pickedPet.getPetId(), photoId).map(this::convertToPhotoDTO);
 	}
 
 	private PetDTO convertToPetDTO(Pet pet) {
