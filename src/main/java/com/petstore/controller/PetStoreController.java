@@ -53,7 +53,7 @@ public class PetStoreController {
 	}
 
 	@PutMapping("/pet/{id}")
-	public ResponseEntity<String> updatePet(@PathVariable(name = "id") Long petId, @RequestBody PetDTO petDTO) throws ResourceNotFoundException {
+	public ResponseEntity<String> updatePet(@PathVariable(name = "id") Long petId,@Valid @RequestBody PetDTO petDTO) throws ResourceNotFoundException {
 		petDTO.setPetId(petId);
 		petStoreService.updatePet(petId, petDTO);
 		return ResponseEntity.ok().build();
@@ -66,7 +66,7 @@ public class PetStoreController {
 	}
 
 	@GetMapping(value = "/pet/{id}/photo/{photoId}")
-	public ResponseEntity<byte[]> getPetPhotoById(@PathVariable(name = "id") Long petId, 
+	public ResponseEntity<byte[]> getPetPhotoById(@PathVariable(name = "id") Long petId,
 										     @PathVariable(name = "photoId") Long photoId) throws ResourceNotFoundException {
 		
 		Optional<PhotoDTO> petPhotoOptional = petStoreService.getPetPhotoById(petId, photoId);

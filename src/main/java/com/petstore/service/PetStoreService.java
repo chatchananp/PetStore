@@ -54,7 +54,7 @@ public class PetStoreService {
 	public PetDTO updatePet(Long petId, PetDTO petDTO) throws ResourceNotFoundException {
 		PetDTO pickedPet = convertToPetDTO(petRepo.findById(petId)
 				.orElseThrow(() -> new ResourceNotFoundException(PET_NOT_FOUND + petId)));
-
+		
 		pickedPet.setPetId(petDTO.getPetId());
 		pickedPet.setPetName(petDTO.getPetName());
 		pickedPet.setPetStatus(petDTO.getPetStatus());
