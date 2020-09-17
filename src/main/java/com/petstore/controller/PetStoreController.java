@@ -54,7 +54,6 @@ public class PetStoreController {
 
 	@PutMapping("/pet/{id}")
 	public ResponseEntity<String> updatePet(@PathVariable(name = "id") Long petId, @RequestBody PetDTO petDTO) throws ResourceNotFoundException {
-		petDTO.setPetId(petId);
 		petStoreService.updatePet(petId, petDTO);
 		return ResponseEntity.ok().build();
 	}
