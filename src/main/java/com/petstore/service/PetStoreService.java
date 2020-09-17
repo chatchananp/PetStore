@@ -2,7 +2,6 @@ package com.petstore.service;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
@@ -77,14 +76,13 @@ public class PetStoreService {
 		petPhotoRepo.save(photoFile);
 	}
 
-	public Optional<PhotoDTO> getPetPhotoById(Long petId, Long photoId) throws ResourceNotFoundException {
+	public PhotoDTO getPetPhotoById(Long petId, Long photoId) throws ResourceNotFoundException {
 		PetDTO pickedPet = convertToPetDTO(petRepo.findById(petId)
 				.orElseThrow(() -> new ResourceNotFoundException(PET_NOT_FOUND + petId)));
 		
-		PhotoDTO pickedPetPhoto = convertToPhotoDTO(petPhotoRepo.findById(photoId)
+		return convertToPhotoDTO(petPhotoRepo
+				.findByPetIdAndPhotoId(pickedPet.getPetId(), photoId)
 				.orElseThrow(() -> new ResourceNotFoundException("Photo not found")));
-		
-		return petPhotoRepo.findByPetIdAndPhotoId(pickedPet.getPetId(), pickedPetPhoto.getPhotoId()).map(this::convertToPhotoDTO);
 	}
 
 	private PetDTO convertToPetDTO(Pet pet) {

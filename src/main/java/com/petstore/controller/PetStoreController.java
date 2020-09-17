@@ -2,7 +2,6 @@ package com.petstore.controller;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
 
 import javax.validation.Valid;
 
@@ -52,7 +51,7 @@ public class PetStoreController {
 	}
 
 	@PutMapping("/pet/{id}")
-	public ResponseEntity<String> updatePet(@PathVariable(name = "id") Long petId,@Valid @RequestBody PetDTO petDTO) throws ResourceNotFoundException {
+	public ResponseEntity<String> updatePet(@PathVariable(name = "id") Long petId, @Valid @RequestBody PetDTO petDTO) throws ResourceNotFoundException {
 		petDTO.setPetId(petId);
 		petStoreService.updatePet(petId, petDTO);
 		return ResponseEntity.ok().build();
@@ -68,9 +67,8 @@ public class PetStoreController {
 	public ResponseEntity<byte[]> getPetPhotoById(@PathVariable(name = "id") Long petId,
 										     @PathVariable(name = "photoId") Long photoId) throws ResourceNotFoundException {
 		
-		Optional<PhotoDTO> petPhotoOptional = petStoreService.getPetPhotoById(petId, photoId);
-		PhotoDTO petPhotoFile = petPhotoOptional.get();
-		return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(petPhotoFile.getPetPhotoData());
+		PhotoDTO petPhoto = petStoreService.getPetPhotoById(petId, photoId);
+		return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(petPhoto.getPetPhotoData());
 		
 	}
 
