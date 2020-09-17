@@ -4,8 +4,6 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -13,6 +11,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
+
+import com.petstore.exception.Enum;
 
 @Entity
 @Table(name = "Pet")
@@ -39,14 +39,14 @@ public class Pet {
 		available, pending, sold
 	}
 	
-	@Enumerated(EnumType.STRING)
 	@Column(name = "pet_status")
-	@NotBlank(message = "Please insert status")
-	private Status petStatus;
+	//@NotBlank(message = "Please insert status")
+	@Enum(enumClass=Status.class, ignoreCase=true)
+	private String petStatus;
 	
 	public Pet() {}
 	
-	public Pet(String petName, Status petStatus) {
+	public Pet(String petName, String petStatus) {
 		this.petName = petName;
 		this.petStatus = petStatus;
 	}
@@ -65,10 +65,10 @@ public class Pet {
 		this.petName = petName;
 	}
 
-	public Status getPetStatus() {
+	public String getPetStatus() {
 		return petStatus;
 	}
-	public void setPetStatus(Status petStatus) {
+	public void setPetStatus(String petStatus) {
 		this.petStatus = petStatus;
 	}
 }

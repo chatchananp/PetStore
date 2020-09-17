@@ -17,7 +17,6 @@ import com.petstore.dto.PetDTO;
 import com.petstore.dto.PhotoDTO;
 import com.petstore.exception.ResourceNotFoundException;
 import com.petstore.model.Pet;
-import com.petstore.model.Pet.Status;
 import com.petstore.model.PetPhoto;
 import com.petstore.repository.PetPhotoRepository;
 import com.petstore.repository.PetRepository;
@@ -48,7 +47,7 @@ public class PetStoreService {
 				.orElseThrow(() -> new ResourceNotFoundException(PET_NOT_FOUND + petId)));
 	}
 
-	public Stream<PetDTO> getPetByStatus(Status status) {
+	public Stream<PetDTO> getPetByStatus(String status) {
 		return petRepo.findByPetStatus(status).stream().map(this::convertToPetDTO);
 	}
 

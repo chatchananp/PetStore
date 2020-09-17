@@ -23,7 +23,6 @@ import org.springframework.web.multipart.MultipartFile;
 import com.petstore.dto.PetDTO;
 import com.petstore.dto.PhotoDTO;
 import com.petstore.exception.ResourceNotFoundException;
-import com.petstore.model.Pet.Status;
 import com.petstore.service.PetStoreService;
 
 @RestController
@@ -49,7 +48,7 @@ public class PetStoreController {
 	}
 
 	@GetMapping(value = "/pet/status/{status}")
-	public ResponseEntity<Stream<PetDTO>> getPetByStatus(@PathVariable(name = "status") Status status) {
+	public ResponseEntity<Stream<PetDTO>> getPetByStatus(@PathVariable(name = "status") String status) {
 		return ResponseEntity.ok().body(petStoreService.getPetByStatus(status));
 	}
 
