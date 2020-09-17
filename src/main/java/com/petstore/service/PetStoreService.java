@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.petstore.dto.PetDTO;
 import com.petstore.dto.PhotoDTO;
+import com.petstore.exception.ResourceNotFoundException;
 import com.petstore.model.Pet;
 import com.petstore.model.Pet.Status;
 import com.petstore.model.PetPhoto;
@@ -23,7 +24,7 @@ import com.petstore.repository.PetRepository;
 
 @Service
 public class PetStoreService {
-	
+
 	@Autowired
 	private PetRepository petRepo;
 	@Autowired
@@ -35,54 +36,48 @@ public class PetStoreService {
 		Pet pet = new ModelMapper().map(petDTO, Pet.class);
 		petRepo.save(pet);
 	}
-	
+
 	public List<PetDTO> getAllPet() {
-		return petRepo
-				.findAll().stream()
-				.map(this::convertToPetDTO)
-				.collect(Collectors.toList());
+		return petRepo.findAll().stream().map(this::convertToPetDTO).collect(Collectors.toList());
 	}
-	
-	public PetDTO getPetById(Long petId) {
-		return convertToPetDTO(petRepo.findById(petId).get());
+
+	public PetDTO getPetById(Long petId) throws ResourceNotFoundException {
+		return convertToPetDTO(petRepo.findById(petId)
+				.orElseThrow(() -> new ResourceNotFoundException("Pet not found for this id :: " + petId)));
 	}
-	
+
 	public Stream<PetDTO> getPetByStatus(Status status) {
 		return petRepo.findByPetStatus(status).stream().map(this::convertToPetDTO);
 	}
-	
-	public PetDTO updatePet(PetDTO petDTO) {
-        Optional < PetDTO > pickedPet = petRepo.findById(petDTO.getPetId()).map(this::convertToPetDTO);
 
-        if (pickedPet.isPresent()) {
-            PetDTO petDTOUpdate = pickedPet.get();
-            petDTOUpdate.setPetId(petDTO.getPetId());
-            petDTOUpdate.setPetName(petDTO.getPetName());
-            petDTOUpdate.setPetStatus(petDTO.getPetStatus());
-            Pet petUpdate = new ModelMapper().map(petDTOUpdate, Pet.class);
-            petRepo.save(petUpdate);
-            
-            return petDTOUpdate;
-        } else {
-        	return null;
-        }
-    }
-	
+	public PetDTO updatePet(Long petId, PetDTO petDTO) throws ResourceNotFoundException {
+		PetDTO pickedPet = convertToPetDTO(petRepo.findById(petId)
+				.orElseThrow(() -> new ResourceNotFoundException("Pet not found for this id :: " + petId)));
+
+		pickedPet.setPetId(petDTO.getPetId());
+		pickedPet.setPetName(petDTO.getPetName());
+		pickedPet.setPetStatus(petDTO.getPetStatus());
+		Pet petUpdate = new ModelMapper().map(pickedPet, Pet.class);
+		petRepo.save(petUpdate);
+
+		return pickedPet;
+	}
+
 	public void deletePet(Long petId) {
-        Optional < PetDTO > pickedPet = petRepo.findById(petId).map(this::convertToPetDTO);
-        PetDTO petDTODeleting = pickedPet.get();
-        Pet deletingPet = new ModelMapper().map(petDTODeleting, Pet.class);
-        petRepo.delete(deletingPet);
-    }
-	
+		Optional<PetDTO> pickedPet = petRepo.findById(petId).map(this::convertToPetDTO);
+		PetDTO petDTODeleting = pickedPet.get();
+		Pet deletingPet = new ModelMapper().map(petDTODeleting, Pet.class);
+		petRepo.delete(deletingPet);
+	}
+
 	public PetPhoto uploadPhoto(MultipartFile file, Long petId) throws IOException {
 		// Normalize file name
-        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
-        
-        PetPhoto photoFile = new PetPhoto(fileName, file.getBytes(), petId);
-        return petPhotoRepo.save(photoFile);
+		String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+
+		PetPhoto photoFile = new PetPhoto(fileName, file.getBytes(), petId);
+		return petPhotoRepo.save(photoFile);
 	}
-	
+
 	public Optional<PhotoDTO> getPetPhotoById(Long petId, Long photoId) {
 		return petPhotoRepo.findByPetIdAndPhotoId(petId, photoId).map(this::convertToPhotoDTO);
 	}
@@ -91,7 +86,7 @@ public class PetStoreService {
 		modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE);
 		return modelMapper.map(pet, PetDTO.class);
 	}
-	
+
 	private PhotoDTO convertToPhotoDTO(PetPhoto petPhoto) {
 		modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE);
 		return modelMapper.map(petPhoto, PhotoDTO.class);

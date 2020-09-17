@@ -22,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.petstore.dto.PetDTO;
 import com.petstore.dto.PhotoDTO;
+import com.petstore.exception.ResourceNotFoundException;
 import com.petstore.model.Pet.Status;
 import com.petstore.service.PetStoreService;
 
@@ -43,7 +44,7 @@ public class PetStoreController {
 	}
 
 	@GetMapping(value = "/pet/{id}")
-	public ResponseEntity<PetDTO> getPetById(@PathVariable(name = "id") Long petId) {
+	public ResponseEntity<PetDTO> getPetById(@PathVariable(name = "id") Long petId) throws ResourceNotFoundException {
 		return ResponseEntity.ok().body(petStoreService.getPetById(petId));
 	}
 
@@ -53,9 +54,9 @@ public class PetStoreController {
 	}
 
 	@PutMapping("/pet/{id}")
-	public ResponseEntity<String> updatePet(@PathVariable(name = "id") Long petId, @RequestBody PetDTO petDTO) {
+	public ResponseEntity<String> updatePet(@PathVariable(name = "id") Long petId, @RequestBody PetDTO petDTO) throws ResourceNotFoundException {
 		petDTO.setPetId(petId);
-		petStoreService.updatePet(petDTO);
+		petStoreService.updatePet(petId, petDTO);
 		return ResponseEntity.ok().build();
 	}
 
