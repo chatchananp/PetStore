@@ -54,7 +54,7 @@ public class PetStoreController {
 	public ResponseEntity<String> updatePet(@PathVariable(name = "id") Long petId, @Valid @RequestBody PetDTO petDTO) throws ResourceNotFoundException {
 		petDTO.setPetId(petId);
 		petStoreService.updatePet(petId, petDTO);
-		return ResponseEntity.ok().build();
+		return ResponseEntity.ok("Update pet successful");
 	}
 
 	@PostMapping(value = "/pet/{id}/uploadImage")
