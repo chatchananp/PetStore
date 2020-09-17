@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -30,9 +32,9 @@ public class PetStoreController {
 	PetStoreService petStoreService;
 
 	@PostMapping(value = "/pet")
-	public ResponseEntity<String> addPet(@RequestBody PetDTO petDTO) {
+	public ResponseEntity<String> addPet(@Valid @RequestBody PetDTO petDTO) {
 		petStoreService.addPet(petDTO);
-		return ResponseEntity.ok().build();
+		return ResponseEntity.ok("Add pet successful");
 	}
 
 	@GetMapping(value = "/pet")

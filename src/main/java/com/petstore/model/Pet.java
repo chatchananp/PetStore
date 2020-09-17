@@ -12,8 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "Pet")
@@ -25,7 +24,7 @@ public class Pet {
 	private Long petId;
 	
 	@Column(name = "pet_name")
-	@NotEmpty(message = "Please insert pet name")
+	@NotBlank(message = "Please insert pet name")
 	private String petName;
 	
 	@OneToMany(cascade = CascadeType.ALL)
@@ -42,7 +41,7 @@ public class Pet {
 	
 	@Enumerated(EnumType.STRING)
 	@Column(name = "pet_status")
-	@NotEmpty(message = "Please insert status")
+	@NotBlank(message = "Please insert status")
 	private Status petStatus;
 	
 	public Pet() {}
