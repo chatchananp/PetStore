@@ -15,9 +15,6 @@ public class PetPhoto {
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY) @Column(name = "photo_id")
 	private Long photoId;
 	
-	@Column(name = "photo_name")
-	private String petPhotoName;
-	
 	@Lob @Column(name = "photo_data")
 	private byte[] petPhotoData;
 	
@@ -26,8 +23,7 @@ public class PetPhoto {
 	
 	public PetPhoto() {}
 	
-	public PetPhoto(String petPhotoName, byte[] petPhotoData, Long petId) {
-		this.petPhotoName = petPhotoName;
+	public PetPhoto(byte[] petPhotoData, Long petId) {
 		this.petPhotoData = petPhotoData;
 		this.petId = petId;
 	}
@@ -38,14 +34,6 @@ public class PetPhoto {
 	
 	public void setPhotoId(Long photoId) {
 		this.photoId = photoId;
-	}
-	
-	public String getPetPhotoName() {
-		return petPhotoName;
-	}
-
-	public void setPetPhotoName(String petPhotoName) {
-		this.petPhotoName = petPhotoName;
 	}
 
 	public byte[] getPetPhotoData() {

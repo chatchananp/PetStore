@@ -4,13 +4,11 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.petstore.dto.PetDTO;
@@ -74,11 +72,8 @@ public class PetStoreService {
 	public void uploadPhoto(MultipartFile file, Long petId) throws IOException, ResourceNotFoundException {
 		PetDTO pickedPet = convertToPetDTO(petRepo.findById(petId)
 				.orElseThrow(() -> new ResourceNotFoundException(PET_NOT_FOUND + petId)));
-		
-		// Normalize file name
-		String fileName = StringUtils.cleanPath(file.getOriginalFilename());
 
-		PetPhoto photoFile = new PetPhoto(fileName, file.getBytes(), pickedPet.getPetId());
+		PetPhoto photoFile = new PetPhoto(file.getBytes(), pickedPet.getPetId());
 		petPhotoRepo.save(photoFile);
 	}
 

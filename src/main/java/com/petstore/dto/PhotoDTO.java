@@ -2,7 +2,6 @@ package com.petstore.dto;
 
 public class PhotoDTO {
 	private Long photoId;
-	private String petPhotoName;
 	private byte[] petPhotoData;
 	private Long petId;
 	public Long getPhotoId() {
@@ -10,12 +9,6 @@ public class PhotoDTO {
 	}
 	public void setPhotoId(Long photoId) {
 		this.photoId = photoId;
-	}
-	public String getPetPhotoName() {
-		return petPhotoName;
-	}
-	public void setPetPhotoName(String petPhotoName) {
-		this.petPhotoName = petPhotoName;
 	}
 	public byte[] getPetPhotoData() {
 		return petPhotoData;
