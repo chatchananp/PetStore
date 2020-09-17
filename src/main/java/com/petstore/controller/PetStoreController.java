@@ -67,7 +67,7 @@ public class PetStoreController {
 
 	@GetMapping(value = "/pet/{id}/photo/{photoId}")
 	public ResponseEntity<byte[]> getPetPhotoById(@PathVariable(name = "id") Long petId, 
-										     @PathVariable(name = "photoId") Long photoId) {
+										     @PathVariable(name = "photoId") Long photoId) throws ResourceNotFoundException {
 		
 		Optional<PhotoDTO> petPhotoOptional = petStoreService.getPetPhotoById(petId, photoId);
 		PhotoDTO petPhotoFile = petPhotoOptional.get();

@@ -86,7 +86,10 @@ public class PetStoreService {
 		PetDTO pickedPet = convertToPetDTO(petRepo.findById(petId)
 				.orElseThrow(() -> new ResourceNotFoundException(PET_NOT_FOUND + petId)));
 		
-		return petPhotoRepo.findByPetIdAndPhotoId(pickedPet.getPetId(), photoId).map(this::convertToPhotoDTO);
+		PhotoDTO pickedPetPhoto = convertToPhotoDTO(petPhotoRepo.findById(photoId)
+				.orElseThrow(() -> new ResourceNotFoundException("Photo not found")));
+		
+		return petPhotoRepo.findByPetIdAndPhotoId(pickedPet.getPetId(), pickedPetPhoto.getPhotoId()).map(this::convertToPhotoDTO);
 	}
 
 	private PetDTO convertToPetDTO(Pet pet) {
