@@ -64,10 +64,10 @@ public class PetStoreService {
 		return pickedPet;
 	}
 
-	public void deletePet(Long petId) {
-		Optional<PetDTO> pickedPet = petRepo.findById(petId).map(this::convertToPetDTO);
-		PetDTO petDTODeleting = pickedPet.get();
-		Pet deletingPet = new ModelMapper().map(petDTODeleting, Pet.class);
+	public void deletePet(Long petId) throws ResourceNotFoundException {
+		PetDTO pickedPet = convertToPetDTO(petRepo.findById(petId)
+				.orElseThrow(() -> new ResourceNotFoundException(PET_NOT_FOUND + petId)));
+		Pet deletingPet = new ModelMapper().map(pickedPet, Pet.class);
 		petRepo.delete(deletingPet);
 	}
 
