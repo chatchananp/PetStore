@@ -6,6 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.petstore.model.PetPhoto;
 
-public interface PetPhotoRepository extends JpaRepository<PetPhoto, Long>{
-	Optional<PetPhoto> findByPetIdAndPhotoId(Long petId, Long photoId);
+public interface PetPhotoRepository extends JpaRepository<PetPhoto, String>{
+	Optional<PetPhoto> findByPetIdAndPhotoId(String petId, String photoId);
 }
