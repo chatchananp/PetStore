@@ -13,20 +13,20 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<?> resourceNotFoundException(ResourceNotFoundException ex, WebRequest request) {
-        ErrorDetails errorDetails = new ErrorDetails(ex.getMessage(), request.getDescription(false));
+        ErrorDetails errorDetails = new ErrorDetails(404, ex.getMessage(), request.getDescription(false));
         return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> globleExcpetionHandler(Exception ex, WebRequest request) {
-        ErrorDetails errorDetails = new ErrorDetails(ex.getMessage(), request.getDescription(false));
+        ErrorDetails errorDetails = new ErrorDetails(500, ex.getMessage(), request.getDescription(false));
         return new ResponseEntity<>(errorDetails, HttpStatus.INTERNAL_SERVER_ERROR);
     }
  
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
            HttpHeaders headers, HttpStatus status, WebRequest request) {
-           ErrorDetails errorDetails = new ErrorDetails("Validation Failed",
+           ErrorDetails errorDetails = new ErrorDetails(400, "Validation Failed",
                ex.getBindingResult().toString());
            return new ResponseEntity<Object>(errorDetails, HttpStatus.BAD_REQUEST);
     } 

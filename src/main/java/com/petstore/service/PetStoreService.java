@@ -39,7 +39,7 @@ public class PetStoreService {
 		List<PetDTO> pets = petRepo.findAll().stream().map(this::convertToPetDTO).collect(Collectors.toList());
 
 		if (pets == null || pets.isEmpty()) {
-			throw new ResourceNotFoundException("Pet not found!");
+			throw new ResourceNotFoundException("Pet not found in database!");
 		}
 
 		return pets;
@@ -54,7 +54,7 @@ public class PetStoreService {
 		List<PetDTO> pets = petRepo.findByPetStatus(status).stream().map(this::convertToPetDTO).collect(Collectors.toList());
 		
 		if (pets == null || pets.isEmpty()) {
-			throw new ResourceNotFoundException("Pet not found!");
+			throw new ResourceNotFoundException("Pet not found for this status: " + status);
 		}
 
 		return pets;
