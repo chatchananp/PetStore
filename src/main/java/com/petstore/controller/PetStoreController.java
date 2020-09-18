@@ -36,7 +36,7 @@ public class PetStoreController {
 	}
 
 	@GetMapping(value = "/pet")
-	public ResponseEntity<List<PetDTO>> getAllPet() {
+	public ResponseEntity<List<PetDTO>> getAllPet() throws ResourceNotFoundException {
 		return ResponseEntity.ok().body(petStoreService.getAllPet());
 	}
 
@@ -46,7 +46,7 @@ public class PetStoreController {
 	}
 
 	@GetMapping(value = "/pet/status/{status}")
-	public ResponseEntity<List<PetDTO>> getPetByStatus(@PathVariable(name = "status") String status) {
+	public ResponseEntity<List<PetDTO>> getPetByStatus(@PathVariable(name = "status") String status) throws ResourceNotFoundException {
 		return ResponseEntity.ok().body(petStoreService.getPetByStatus(status));
 	}
 
