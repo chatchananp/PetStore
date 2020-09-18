@@ -13,26 +13,26 @@ import javax.persistence.Table;
 public class PetPhoto {
 	
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY) @Column(name = "photo_id")
-	private Long photoId;
+	private String photoId;
 	
 	@Lob @Column(name = "photo_data")
 	private byte[] petPhotoData;
 	
 	@Column(name = "pet_id")
-	private Long petId;
+	private String petId;
 	
 	public PetPhoto() {}
 	
-	public PetPhoto(byte[] petPhotoData, Long petId) {
+	public PetPhoto(byte[] petPhotoData, String petId) {
 		this.petPhotoData = petPhotoData;
 		this.petId = petId;
 	}
 	
-	public Long getPhotoId() {
+	public String getPhotoId() {
 		return photoId;
 	}
 	
-	public void setPhotoId(Long photoId) {
+	public void setPhotoId(String photoId) {
 		this.photoId = photoId;
 	}
 
@@ -44,11 +44,11 @@ public class PetPhoto {
 		this.petPhotoData = petPhotoData;
 	}
 
-	public Long getPetId() {
+	public String getPetId() {
 		return petId;
 	}
 
-	public void setPetId(Long petId) {
+	public void setPetId(String petId) {
 		this.petId = petId;
 	}
 }

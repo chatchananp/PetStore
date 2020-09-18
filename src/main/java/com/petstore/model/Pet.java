@@ -21,7 +21,7 @@ public class Pet {
 	@Id
 	@Column(name = "pet_id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long petId;
+	private String petId;
 	
 	@Column(name = "pet_name")
 	@NotBlank(message = "Please insert pet name")
@@ -51,10 +51,10 @@ public class Pet {
 		this.petStatus = petStatus;
 	}
 
-	public Long getPetId() {
+	public String getPetId() {
 		return petId;
 	}
-	public void setPetId(Long petId) {
+	public void setPetId(String petId) {
 		this.petId = petId;
 	}
 

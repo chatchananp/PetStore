@@ -9,7 +9,7 @@ import com.petstore.model.PetPhoto;
 import com.petstore.exception.Enum;
 
 public class PetDTO {
-	private Long petId;
+	private String petId;
 	
 	@NotBlank(message = "Please insert pet name")
 	private String petName;
@@ -24,11 +24,11 @@ public class PetDTO {
 	@Enum(enumClass=Status.class, ignoreCase=true)
 	private String petStatus;
 
-	public Long getPetId() {
+	public String getPetId() {
 		return petId;
 	}
 
-	public void setPetId(Long petId) {
+	public void setPetId(String petId) {
 		this.petId = petId;
 	}
 
