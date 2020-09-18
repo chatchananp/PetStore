@@ -41,7 +41,7 @@ public class PetStoreController {
 	}
 
 	@GetMapping(value = "/pet/{id}")
-	public ResponseEntity<PetDTO> getPetById(@PathVariable(name = "id") String petId) throws ResourceNotFoundException {
+	public ResponseEntity<PetDTO> getPetById(@PathVariable(name = "id") Long petId) throws ResourceNotFoundException {
 		return ResponseEntity.ok().body(petStoreService.getPetById(petId));
 	}
 
@@ -51,21 +51,21 @@ public class PetStoreController {
 	}
 
 	@PutMapping("/pet/{id}")
-	public ResponseEntity<String> updatePet(@PathVariable(name = "id") String petId, @Valid @RequestBody PetDTO petDTO) throws ResourceNotFoundException {
+	public ResponseEntity<String> updatePet(@PathVariable(name = "id") Long petId, @Valid @RequestBody PetDTO petDTO) throws ResourceNotFoundException {
 		petDTO.setPetId(petId);
 		petStoreService.updatePet(petId, petDTO);
 		return ResponseEntity.ok("Update pet successful");
 	}
 
 	@PostMapping(value = "/pet/{id}/uploadImage")
-	public ResponseEntity<String> uploadPhoto(@RequestParam("file") MultipartFile file, @PathVariable(name = "id") String petId) throws IOException, ResourceNotFoundException {
+	public ResponseEntity<String> uploadPhoto(@RequestParam("file") MultipartFile file, @PathVariable(name = "id") Long petId) throws IOException, ResourceNotFoundException {
 		petStoreService.uploadPhoto(file, petId);
 		return ResponseEntity.ok().build();
 	}
 
 	@GetMapping(value = "/pet/{id}/photo/{photoId}")
-	public ResponseEntity<byte[]> getPetPhotoById(@PathVariable(name = "id") String petId,
-										     @PathVariable(name = "photoId") String photoId) throws ResourceNotFoundException {
+	public ResponseEntity<byte[]> getPetPhotoById(@PathVariable(name = "id") Long petId,
+										     @PathVariable(name = "photoId") Long photoId) throws ResourceNotFoundException {
 		
 		PhotoDTO petPhoto = petStoreService.getPetPhotoById(petId, photoId);
 		return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(petPhoto.getPetPhotoData());
@@ -73,7 +73,7 @@ public class PetStoreController {
 	}
 
 	@DeleteMapping("/pet/{id}")
-	public ResponseEntity<String> deletePet(@PathVariable(name = "id") String petId) throws ResourceNotFoundException {
+	public ResponseEntity<String> deletePet(@PathVariable(name = "id") Long petId) throws ResourceNotFoundException {
 		this.petStoreService.deletePet(petId);
 		return ResponseEntity.ok("Delete pet successful");
 	}

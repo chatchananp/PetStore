@@ -1,15 +1,15 @@
 package com.petstore.dto;
 
 public class PhotoDTO {
-	private String photoId;
+	private Long photoId;
 	private byte[] petPhotoData;
-	private String petId;
+	private Long petId;
 	
-	public String getPhotoId() {
+	public Long getPhotoId() {
 		return photoId;
 	}
 	
-	public void setPhotoId(String photoId) {
+	public void setPhotoId(Long photoId) {
 		this.photoId = photoId;
 	}
 	
@@ -21,11 +21,11 @@ public class PhotoDTO {
 		this.petPhotoData = petPhotoData;
 	}
 	
-	public String getPetId() {
+	public Long getPetId() {
 		return petId;
 	}
 	
-	public void setPetId(String petId) {
+	public void setPetId(Long petId) {
 		this.petId = petId;
 	}
 	
