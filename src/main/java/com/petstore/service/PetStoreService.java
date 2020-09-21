@@ -93,9 +93,7 @@ public class PetStoreService {
 	public void deletePet(String petId) throws ResourceNotFoundException, MethodArgumentNotValidEx {
 		if (petId.matches("\\d+")) {
 			Long longPetId = Long.parseLong(petId);
-			PetDTO pickedPet = convertToPetDTO(
-					petRepo.findById(longPetId).orElseThrow(() -> new ResourceNotFoundException(PET_NOT_FOUND + petId)));
-			Pet deletingPet = new ModelMapper().map(pickedPet, Pet.class);
+			Pet deletingPet = petRepo.findById(longPetId).orElseThrow(() -> new ResourceNotFoundException(PET_NOT_FOUND + petId));
 			petRepo.delete(deletingPet);
 		} else {
 			throw new MethodArgumentNotValidEx(INVALID_PET_ID);
