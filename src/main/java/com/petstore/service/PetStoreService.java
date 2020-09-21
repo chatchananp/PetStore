@@ -29,9 +29,6 @@ public class PetStoreService {
 	@Autowired
 	private ModelMapper modelMapper;
 
-	private static final String PET_NOT_FOUND = "Pet not found for this id : ";
-	private static final String INVALID_PET_ID = "Invalid pet id";
-
 	public void addPet(PetDTO petDTO) {
 		Pet pet = new ModelMapper().map(petDTO, Pet.class);
 		petRepo.save(pet);
@@ -51,9 +48,9 @@ public class PetStoreService {
 		if (petId.matches("\\d+")) {
 			Long longPetId = Long.parseLong(petId);
 			return convertToPetDTO(petRepo.findById(longPetId)
-					.orElseThrow(() -> new ResourceNotFoundException(PET_NOT_FOUND + petId)));
+					.orElseThrow(() -> new ResourceNotFoundException("Pet not found for this id : " + petId)));
 		} else {
-			throw new MethodArgumentNotValidEx(INVALID_PET_ID);
+			throw new MethodArgumentNotValidEx("Invalid pet id");
 		}
 
 	}
@@ -92,11 +89,11 @@ public class PetStoreService {
 		if (petId.matches("\\d+")) {
 			Long longPetId = Long.parseLong(petId);
 			Pet deletingPet = petRepo.findById(longPetId)
-					.orElseThrow(() -> new ResourceNotFoundException(PET_NOT_FOUND + petId));
+					.orElseThrow(() -> new ResourceNotFoundException("Pet not found for this id : " + petId));
 			petRepo.delete(deletingPet);
 
 		} else {
-			throw new MethodArgumentNotValidEx(INVALID_PET_ID);
+			throw new MethodArgumentNotValidEx("Invalid pet id");
 
 		}
 
