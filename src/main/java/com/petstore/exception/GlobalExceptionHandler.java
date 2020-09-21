@@ -1,5 +1,7 @@
 package com.petstore.exception;
 
+import javax.validation.ValidationException;
+
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,9 +35,16 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 		return new ResponseEntity<Object>(errorDetails, HttpStatus.METHOD_NOT_ALLOWED);
 	}
 	
+	@ExceptionHandler(ValidationException.class)
+	protected ResponseEntity<Object> handleValidationException(ValidationException ex, WebRequest request) {
+		ErrorDetails errorDetails = new ErrorDetails(HttpStatus.METHOD_NOT_ALLOWED.value(), "Method not allowed",
+				"Validation Exception");
+		return new ResponseEntity<Object>(errorDetails, HttpStatus.METHOD_NOT_ALLOWED);
+	}
+	
 	@ExceptionHandler(NumberFormatException.class)
 	public ResponseEntity<Object> handleNumberFormat(NumberFormatException ex, WebRequest request) {
-		ErrorDetails errorDetails = new ErrorDetails(HttpStatus.METHOD_NOT_ALLOWED.value(), "Method not allowed", ex.getMessage());
+		ErrorDetails errorDetails = new ErrorDetails(HttpStatus.METHOD_NOT_ALLOWED.value(), "Method not allowed", "Invalid input");
 		return new ResponseEntity<>(errorDetails, HttpStatus.METHOD_NOT_ALLOWED);
 	}
 
