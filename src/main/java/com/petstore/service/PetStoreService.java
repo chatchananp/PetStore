@@ -110,12 +110,24 @@ public class PetStoreService {
 		
 	}
 
-	public PhotoDTO getPetPhotoById(Long petId, Long photoId) throws ResourceNotFoundException {
-		PetDTO pickedPet = convertToPetDTO(
-				petRepo.findById(petId).orElseThrow(() -> new ResourceNotFoundException(PET_NOT_FOUND + petId)));
-
-		return convertToPhotoDTO(petPhotoRepo.findByPetIdAndPhotoId(pickedPet.getPetId(), photoId)
-				.orElseThrow(() -> new ResourceNotFoundException("Photo not found")));
+	public PhotoDTO getPetPhotoById(String petId, String photoId) throws ResourceNotFoundException, MethodArgumentNotValidEx {
+		if (petId.matches("\\d+")) {
+			Long longPetId = Long.parseLong(petId);
+			PetDTO pickedPet = convertToPetDTO(
+					petRepo.findById(longPetId).orElseThrow(() -> new ResourceNotFoundException(PET_NOT_FOUND + petId)));
+			
+			if (photoId.matches("\\d+")) {
+				Long longPhotoId = Long.parseLong(photoId);
+				return convertToPhotoDTO(petPhotoRepo.findByPetIdAndPhotoId(pickedPet.getPetId(), longPhotoId)
+						.orElseThrow(() -> new ResourceNotFoundException("Photo not found")));
+			} else {
+				throw new MethodArgumentNotValidEx("Invalid pet photo id");
+			}
+			
+		} else {
+			throw new MethodArgumentNotValidEx("Invalid pet id");
+		}
+		
 	}
 
 	private PetDTO convertToPetDTO(Pet pet) {
