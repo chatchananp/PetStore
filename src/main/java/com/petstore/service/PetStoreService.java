@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.petstore.dto.PetDTO;
 import com.petstore.dto.PhotoDTO;
+import com.petstore.exception.MethodArgumentNotValidEx;
 import com.petstore.exception.ResourceNotFoundException;
 import com.petstore.model.Pet;
 import com.petstore.model.PetPhoto;
@@ -45,9 +46,16 @@ public class PetStoreService {
 		return pets;
 	}
 
-	public PetDTO getPetById(Long petId) throws ResourceNotFoundException {
-		return convertToPetDTO(
-				petRepo.findById(petId).orElseThrow(() -> new ResourceNotFoundException(PET_NOT_FOUND + petId)));
+	public PetDTO getPetById(String petId) throws ResourceNotFoundException, MethodArgumentNotValidEx {
+		if (petId.matches("\\d+")) {
+			Long longPetId = Long.parseLong(petId);
+			return convertToPetDTO(
+					petRepo.findById(longPetId).orElseThrow(() -> new ResourceNotFoundException(PET_NOT_FOUND + petId)));
+		} else {
+			throw new MethodArgumentNotValidEx("Invalid pet id");
+		}
+		
+		
 	}
 
 	public List<PetDTO> getPetByStatus(String status) throws ResourceNotFoundException {

@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.petstore.dto.PetDTO;
 import com.petstore.dto.PhotoDTO;
+import com.petstore.exception.MethodArgumentNotValidEx;
 import com.petstore.exception.ResourceNotFoundException;
 import com.petstore.service.PetStoreService;
 
@@ -41,7 +42,7 @@ public class PetStoreController {
 	}
 
 	@GetMapping(value = "/pet/{id}")
-	public ResponseEntity<PetDTO> getPetById(@PathVariable(name = "id") Long petId) throws ResourceNotFoundException {
+	public ResponseEntity<PetDTO> getPetById(@PathVariable(name = "id") String petId) throws ResourceNotFoundException, MethodArgumentNotValidEx {
 		return ResponseEntity.ok().body(petStoreService.getPetById(petId));
 	}
 
