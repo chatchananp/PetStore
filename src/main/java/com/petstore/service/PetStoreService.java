@@ -57,7 +57,7 @@ public class PetStoreService {
 		}
 
 	}
-	
+
 	public List<PetDTO> getPetByStatus(String status) throws ResourceNotFoundException, MethodArgumentNotValidEx {
 		if (status.matches("available|pending|sold")) {
 			List<PetDTO> pets = petRepo.findByPetStatus(status).stream().map(this::convertToPetDTO)
@@ -66,77 +66,65 @@ public class PetStoreService {
 			if (pets == null || pets.isEmpty()) {
 				throw new ResourceNotFoundException("Pet not found for this status: " + status);
 			}
-			
+
 			return pets;
-			
+
 		} else {
 			throw new MethodArgumentNotValidEx("Invalid status value");
 		}
-		
+
 	}
 
 	public PetDTO updatePet(String petId, PetDTO petDTO) throws ResourceNotFoundException, MethodArgumentNotValidEx {
-		if (petId.matches("\\d+")) {
-			Long longPetId = Long.parseLong(petId);
-			PetDTO pickedPet = convertToPetDTO(petRepo.findById(longPetId)
-					.orElseThrow(() -> new ResourceNotFoundException(PET_NOT_FOUND + petId)));
-			pickedPet.setPetId(petDTO.getPetId());
-			pickedPet.setPetName(petDTO.getPetName());
-			pickedPet.setPetStatus(petDTO.getPetStatus());
-			Pet petUpdate = new ModelMapper().map(pickedPet, Pet.class);
-			petRepo.save(petUpdate);
+		PetDTO pickedPet = getPetById(petId);
 
-			return pickedPet;
-			
-		} else {
-			throw new MethodArgumentNotValidEx(INVALID_PET_ID);
-		}
+		pickedPet.setPetId(petDTO.getPetId());
+		pickedPet.setPetName(petDTO.getPetName());
+		pickedPet.setPetStatus(petDTO.getPetStatus());
+		Pet petUpdate = new ModelMapper().map(pickedPet, Pet.class);
+		petRepo.save(petUpdate);
+
+		return pickedPet;
 
 	}
 
 	public void deletePet(String petId) throws ResourceNotFoundException, MethodArgumentNotValidEx {
 		if (petId.matches("\\d+")) {
 			Long longPetId = Long.parseLong(petId);
-			Pet deletingPet = petRepo.findById(longPetId).orElseThrow(() -> new ResourceNotFoundException(PET_NOT_FOUND + petId));
+			Pet deletingPet = petRepo.findById(longPetId)
+					.orElseThrow(() -> new ResourceNotFoundException(PET_NOT_FOUND + petId));
 			petRepo.delete(deletingPet);
+
 		} else {
 			throw new MethodArgumentNotValidEx(INVALID_PET_ID);
+
 		}
-		
+
 	}
 
-	public void uploadPhoto(MultipartFile file, String petId) throws IOException, ResourceNotFoundException, MethodArgumentNotValidEx {
-		if (petId.matches("\\d+")) {
-			Long longPetId = Long.parseLong(petId);
-			PetDTO pickedPet = convertToPetDTO(
-					petRepo.findById(longPetId).orElseThrow(() -> new ResourceNotFoundException(PET_NOT_FOUND + petId)));
+	public void uploadPhoto(MultipartFile file, String petId)
+			throws IOException, ResourceNotFoundException, MethodArgumentNotValidEx {
+		PetDTO pickedPet = getPetById(petId);
 
-			PetPhoto photoFile = new PetPhoto(file.getBytes(), pickedPet.getPetId());
-			petPhotoRepo.save(photoFile);
-		} else {
-			throw new MethodArgumentNotValidEx(INVALID_PET_ID);
-		}
-		
+		PetPhoto photoFile = new PetPhoto(file.getBytes(), pickedPet.getPetId());
+		petPhotoRepo.save(photoFile);
+
 	}
 
-	public PhotoDTO getPetPhotoById(String petId, String photoId) throws ResourceNotFoundException, MethodArgumentNotValidEx {
-		if (petId.matches("\\d+")) {
-			Long longPetId = Long.parseLong(petId);
-			PetDTO pickedPet = convertToPetDTO(
-					petRepo.findById(longPetId).orElseThrow(() -> new ResourceNotFoundException(PET_NOT_FOUND + petId)));
-			
-			if (photoId.matches("\\d+")) {
-				Long longPhotoId = Long.parseLong(photoId);
-				return convertToPhotoDTO(petPhotoRepo.findByPetIdAndPhotoId(pickedPet.getPetId(), longPhotoId)
-						.orElseThrow(() -> new ResourceNotFoundException("Photo not found")));
-			} else {
-				throw new MethodArgumentNotValidEx("Invalid pet photo id");
-			}
+	public PhotoDTO getPetPhotoById(String petId, String photoId)
+			throws ResourceNotFoundException, MethodArgumentNotValidEx {
+		PetDTO pickedPet = getPetById(petId);
+		
+		if (photoId.matches("\\d+")) {
+			Long longPhotoId = Long.parseLong(photoId);
+			return convertToPhotoDTO(petPhotoRepo.findByPetIdAndPhotoId(pickedPet.getPetId(), longPhotoId)
+					.orElseThrow(() -> new ResourceNotFoundException("Photo not found")));
 			
 		} else {
-			throw new MethodArgumentNotValidEx(INVALID_PET_ID);
+			throw new MethodArgumentNotValidEx("Invalid pet photo id");
+			
 		}
-		
+
 	}
 
 	private PetDTO convertToPetDTO(Pet pet) {
