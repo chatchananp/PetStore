@@ -52,10 +52,15 @@ public class PetStoreController {
 	}
 
 	@PutMapping("/pet/{id}")
-	public ResponseEntity<String> updatePet(@PathVariable(name = "id") Long petId, @Valid @RequestBody PetDTO petDTO) throws ResourceNotFoundException {
-		petDTO.setPetId(petId);
-		petStoreService.updatePet(petId, petDTO);
-		return ResponseEntity.ok("Update pet successful");
+	public ResponseEntity<String> updatePet(@PathVariable(name = "id") String petId, @Valid @RequestBody PetDTO petDTO) throws ResourceNotFoundException, MethodArgumentNotValidEx {
+		if (petId.matches("\\d+")) {
+			Long longPetId = Long.parseLong(petId);
+			petDTO.setPetId(longPetId);
+			petStoreService.updatePet(petId, petDTO);
+			return ResponseEntity.ok("Update pet successful");
+		} else {
+			throw new MethodArgumentNotValidEx("Invalid pet id");
+		}
 	}
 
 	@PostMapping(value = "/pet/{id}/uploadImage")

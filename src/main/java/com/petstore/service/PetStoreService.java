@@ -49,18 +49,18 @@ public class PetStoreService {
 	public PetDTO getPetById(String petId) throws ResourceNotFoundException, MethodArgumentNotValidEx {
 		if (petId.matches("\\d+")) {
 			Long longPetId = Long.parseLong(petId);
-			return convertToPetDTO(
-					petRepo.findById(longPetId).orElseThrow(() -> new ResourceNotFoundException(PET_NOT_FOUND + petId)));
+			return convertToPetDTO(petRepo.findById(longPetId)
+					.orElseThrow(() -> new ResourceNotFoundException(PET_NOT_FOUND + petId)));
 		} else {
 			throw new MethodArgumentNotValidEx("Invalid pet id");
 		}
-		
-		
+
 	}
 
 	public List<PetDTO> getPetByStatus(String status) throws ResourceNotFoundException {
-		List<PetDTO> pets = petRepo.findByPetStatus(status).stream().map(this::convertToPetDTO).collect(Collectors.toList());
-		
+		List<PetDTO> pets = petRepo.findByPetStatus(status).stream().map(this::convertToPetDTO)
+				.collect(Collectors.toList());
+
 		if (pets == null || pets.isEmpty()) {
 			throw new ResourceNotFoundException("Pet not found for this status: " + status);
 		}
@@ -68,9 +68,10 @@ public class PetStoreService {
 		return pets;
 	}
 
-	public PetDTO updatePet(Long petId, PetDTO petDTO) throws ResourceNotFoundException {
+	public PetDTO updatePet(String petId, PetDTO petDTO) throws ResourceNotFoundException {
+		Long longPetId = Long.parseLong(petId);
 		PetDTO pickedPet = convertToPetDTO(
-				petRepo.findById(petId).orElseThrow(() -> new ResourceNotFoundException(PET_NOT_FOUND + petId)));
+				petRepo.findById(longPetId).orElseThrow(() -> new ResourceNotFoundException(PET_NOT_FOUND + petId)));
 
 		pickedPet.setPetId(petDTO.getPetId());
 		pickedPet.setPetName(petDTO.getPetName());
@@ -79,6 +80,7 @@ public class PetStoreService {
 		petRepo.save(petUpdate);
 
 		return pickedPet;
+
 	}
 
 	public void deletePet(Long petId) throws ResourceNotFoundException {
