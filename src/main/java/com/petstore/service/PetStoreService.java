@@ -72,7 +72,7 @@ public class PetStoreService {
 
 	}
 
-	public PetDTO updatePet(String petId, PetDTO petDTO) throws ResourceNotFoundException, MethodArgumentNotValidEx {
+	public PetDTO updatePetByPost(String petId, PetDTO petDTO) throws ResourceNotFoundException, MethodArgumentNotValidEx {
 		PetDTO pickedPet = getPetById(petId);
 
 		pickedPet.setPetId(petDTO.getPetId());
@@ -85,6 +85,28 @@ public class PetStoreService {
 
 	}
 
+	public PetDTO updatePetByPut(PetDTO petDTO) throws ResourceNotFoundException, MethodArgumentNotValidEx {
+		String id = Long.toString(petDTO.getPetId());
+		
+		if (id.matches("\\d+")) {
+			PetDTO pickedPet = getPetById(id);
+			pickedPet.setPetId(petDTO.getPetId());
+			pickedPet.setPetName(petDTO.getPetName());
+			pickedPet.setPetStatus(petDTO.getPetStatus());
+			Pet petUpdate = new ModelMapper().map(pickedPet, Pet.class);
+			petRepo.save(petUpdate);
+
+			return pickedPet;
+		
+		} else {
+			throw new MethodArgumentNotValidEx("Invalid pet id");
+			
+		}
+
+		
+
+	}
+	
 	public void deletePet(String petId) throws ResourceNotFoundException, MethodArgumentNotValidEx {
 		if (petId.matches("\\d+")) {
 			Long longPetId = Long.parseLong(petId);
