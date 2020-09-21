@@ -15,7 +15,7 @@ import javax.validation.Payload;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Enum
 {
-    public abstract String message() default "Invalid pet status value.";
+    public abstract String message() default "Invalid status value";
      
     public abstract Class<?>[] groups() default {};
   

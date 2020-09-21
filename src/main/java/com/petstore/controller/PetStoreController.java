@@ -47,7 +47,7 @@ public class PetStoreController {
 	}
 
 	@GetMapping(value = "/pet/status/{status}")
-	public ResponseEntity<List<PetDTO>> getPetByStatus(@PathVariable(name = "status") String status) throws ResourceNotFoundException {
+	public ResponseEntity<List<PetDTO>> getPetByStatus(@PathVariable(name = "status") String status) throws ResourceNotFoundException, MethodArgumentNotValidEx {
 		return ResponseEntity.ok().body(petStoreService.getPetByStatus(status));
 	}
 

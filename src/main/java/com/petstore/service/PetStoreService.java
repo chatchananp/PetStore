@@ -58,15 +58,32 @@ public class PetStoreService {
 
 	}
 
-	public List<PetDTO> getPetByStatus(String status) throws ResourceNotFoundException {
-		List<PetDTO> pets = petRepo.findByPetStatus(status).stream().map(this::convertToPetDTO)
-				.collect(Collectors.toList());
+//	public List<PetDTO> getPetByStatus(String status) throws ResourceNotFoundException {
+//		List<PetDTO> pets = petRepo.findByPetStatus(status).stream().map(this::convertToPetDTO)
+//				.collect(Collectors.toList());
+//
+//		if (pets == null || pets.isEmpty()) {
+//			throw new ResourceNotFoundException("Pet not found for this status: " + status);
+//		}
+//
+//		return pets;
+//	}
+	
+	public List<PetDTO> getPetByStatus(String status) throws ResourceNotFoundException, MethodArgumentNotValidEx {
+		if (status.matches("available|pending|sold")) {
+			List<PetDTO> pets = petRepo.findByPetStatus(status).stream().map(this::convertToPetDTO)
+					.collect(Collectors.toList());
 
-		if (pets == null || pets.isEmpty()) {
-			throw new ResourceNotFoundException("Pet not found for this status: " + status);
+			if (pets == null || pets.isEmpty()) {
+				throw new ResourceNotFoundException("Pet not found for this status: " + status);
+			}
+			
+			return pets;
+			
+		} else {
+			throw new MethodArgumentNotValidEx("Invalid status value");
 		}
-
-		return pets;
+		
 	}
 
 	public PetDTO updatePet(String petId, PetDTO petDTO) throws ResourceNotFoundException {
