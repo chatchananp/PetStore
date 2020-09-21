@@ -32,6 +32,12 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 				ex.getBindingResult().toString());
 		return new ResponseEntity<Object>(errorDetails, HttpStatus.METHOD_NOT_ALLOWED);
 	}
+	
+	@ExceptionHandler(NumberFormatException.class)
+	public ResponseEntity<Object> handleNumberFormat(NumberFormatException ex, WebRequest request) {
+		ErrorDetails errorDetails = new ErrorDetails(HttpStatus.METHOD_NOT_ALLOWED.value(), "Method not allowed", ex.getMessage());
+		return new ResponseEntity<>(errorDetails, HttpStatus.METHOD_NOT_ALLOWED);
+	}
 
 	@ExceptionHandler(MethodArgumentNotValidEx.class)
 	public ResponseEntity<?> anotherHandleMethodArgumentNotValid(MethodArgumentNotValidEx ex, WebRequest request) {
