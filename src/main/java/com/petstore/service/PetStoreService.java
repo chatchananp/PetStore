@@ -30,6 +30,7 @@ public class PetStoreService {
 	private ModelMapper modelMapper;
 
 	private static final String PET_NOT_FOUND = "Pet not found for this id : ";
+	private static final String INVALID_PET_ID = "Invalid pet id";
 
 	public void addPet(PetDTO petDTO) {
 		Pet pet = new ModelMapper().map(petDTO, Pet.class);
@@ -52,7 +53,7 @@ public class PetStoreService {
 			return convertToPetDTO(petRepo.findById(longPetId)
 					.orElseThrow(() -> new ResourceNotFoundException(PET_NOT_FOUND + petId)));
 		} else {
-			throw new MethodArgumentNotValidEx("Invalid pet id");
+			throw new MethodArgumentNotValidEx(INVALID_PET_ID);
 		}
 
 	}
@@ -91,7 +92,7 @@ public class PetStoreService {
 			Pet deletingPet = new ModelMapper().map(pickedPet, Pet.class);
 			petRepo.delete(deletingPet);
 		} else {
-			throw new MethodArgumentNotValidEx("Invalid pet id");
+			throw new MethodArgumentNotValidEx(INVALID_PET_ID);
 		}
 		
 	}
@@ -105,7 +106,7 @@ public class PetStoreService {
 			PetPhoto photoFile = new PetPhoto(file.getBytes(), pickedPet.getPetId());
 			petPhotoRepo.save(photoFile);
 		} else {
-			throw new MethodArgumentNotValidEx("Invalid pet id");
+			throw new MethodArgumentNotValidEx(INVALID_PET_ID);
 		}
 		
 	}
@@ -125,7 +126,7 @@ public class PetStoreService {
 			}
 			
 		} else {
-			throw new MethodArgumentNotValidEx("Invalid pet id");
+			throw new MethodArgumentNotValidEx(INVALID_PET_ID);
 		}
 		
 	}
