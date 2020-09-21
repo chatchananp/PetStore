@@ -79,8 +79,8 @@ public class PetStoreController {
 	}
 
 	@DeleteMapping("/pet/{id}")
-	public ResponseEntity<String> deletePet(@PathVariable(name = "id") Long petId) throws ResourceNotFoundException {
-		this.petStoreService.deletePet(petId);
+	public ResponseEntity<String> deletePet(@PathVariable(name = "id") String petId) throws ResourceNotFoundException, MethodArgumentNotValidEx {
+		petStoreService.deletePet(petId);
 		return ResponseEntity.ok("Delete pet successful");
 	}
 }

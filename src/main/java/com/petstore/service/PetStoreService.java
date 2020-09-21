@@ -83,11 +83,17 @@ public class PetStoreService {
 
 	}
 
-	public void deletePet(Long petId) throws ResourceNotFoundException {
-		PetDTO pickedPet = convertToPetDTO(
-				petRepo.findById(petId).orElseThrow(() -> new ResourceNotFoundException(PET_NOT_FOUND + petId)));
-		Pet deletingPet = new ModelMapper().map(pickedPet, Pet.class);
-		petRepo.delete(deletingPet);
+	public void deletePet(String petId) throws ResourceNotFoundException, MethodArgumentNotValidEx {
+		if (petId.matches("\\d+")) {
+			Long longPetId = Long.parseLong(petId);
+			PetDTO pickedPet = convertToPetDTO(
+					petRepo.findById(longPetId).orElseThrow(() -> new ResourceNotFoundException(PET_NOT_FOUND + petId)));
+			Pet deletingPet = new ModelMapper().map(pickedPet, Pet.class);
+			petRepo.delete(deletingPet);
+		} else {
+			throw new MethodArgumentNotValidEx("Invalid pet id");
+		}
+		
 	}
 
 	public void uploadPhoto(MultipartFile file, Long petId) throws IOException, ResourceNotFoundException {
