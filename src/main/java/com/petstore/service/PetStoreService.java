@@ -75,18 +75,22 @@ public class PetStoreService {
 		
 	}
 
-	public PetDTO updatePet(String petId, PetDTO petDTO) throws ResourceNotFoundException {
-		Long longPetId = Long.parseLong(petId);
-		PetDTO pickedPet = convertToPetDTO(
-				petRepo.findById(longPetId).orElseThrow(() -> new ResourceNotFoundException(PET_NOT_FOUND + petId)));
+	public PetDTO updatePet(String petId, PetDTO petDTO) throws ResourceNotFoundException, MethodArgumentNotValidEx {
+		if (petId.matches("\\d+")) {
+			Long longPetId = Long.parseLong(petId);
+			PetDTO pickedPet = convertToPetDTO(petRepo.findById(longPetId)
+					.orElseThrow(() -> new ResourceNotFoundException(PET_NOT_FOUND + petId)));
+			pickedPet.setPetId(petDTO.getPetId());
+			pickedPet.setPetName(petDTO.getPetName());
+			pickedPet.setPetStatus(petDTO.getPetStatus());
+			Pet petUpdate = new ModelMapper().map(pickedPet, Pet.class);
+			petRepo.save(petUpdate);
 
-		pickedPet.setPetId(petDTO.getPetId());
-		pickedPet.setPetName(petDTO.getPetName());
-		pickedPet.setPetStatus(petDTO.getPetStatus());
-		Pet petUpdate = new ModelMapper().map(pickedPet, Pet.class);
-		petRepo.save(petUpdate);
-
-		return pickedPet;
+			return pickedPet;
+			
+		} else {
+			throw new MethodArgumentNotValidEx(INVALID_PET_ID);
+		}
 
 	}
 
