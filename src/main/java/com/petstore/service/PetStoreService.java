@@ -96,12 +96,18 @@ public class PetStoreService {
 		
 	}
 
-	public void uploadPhoto(MultipartFile file, Long petId) throws IOException, ResourceNotFoundException {
-		PetDTO pickedPet = convertToPetDTO(
-				petRepo.findById(petId).orElseThrow(() -> new ResourceNotFoundException(PET_NOT_FOUND + petId)));
+	public void uploadPhoto(MultipartFile file, String petId) throws IOException, ResourceNotFoundException, MethodArgumentNotValidEx {
+		if (petId.matches("\\d+")) {
+			Long longPetId = Long.parseLong(petId);
+			PetDTO pickedPet = convertToPetDTO(
+					petRepo.findById(longPetId).orElseThrow(() -> new ResourceNotFoundException(PET_NOT_FOUND + petId)));
 
-		PetPhoto photoFile = new PetPhoto(file.getBytes(), pickedPet.getPetId());
-		petPhotoRepo.save(photoFile);
+			PetPhoto photoFile = new PetPhoto(file.getBytes(), pickedPet.getPetId());
+			petPhotoRepo.save(photoFile);
+		} else {
+			throw new MethodArgumentNotValidEx("Invalid pet id");
+		}
+		
 	}
 
 	public PhotoDTO getPetPhotoById(Long petId, Long photoId) throws ResourceNotFoundException {
