@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -72,7 +73,8 @@ public class PetStoreService {
 
 	}
 
-	public PetDTO updatePetByPost(String petId, PetDTO petDTO) throws ResourceNotFoundException, MethodArgumentNotValidEx {
+	public PetDTO updatePetByPost(String petId, PetDTO petDTO)
+			throws ResourceNotFoundException, MethodArgumentNotValidEx {
 		PetDTO pickedPet = getPetById(petId);
 
 		pickedPet.setPetId(petDTO.getPetId());
@@ -87,26 +89,18 @@ public class PetStoreService {
 
 	public PetDTO updatePetByPut(PetDTO petDTO) throws ResourceNotFoundException, MethodArgumentNotValidEx {
 		String id = Long.toString(petDTO.getPetId());
-		
-		if (id.matches("\\d+")) {
-			PetDTO pickedPet = getPetById(id);
-			pickedPet.setPetId(petDTO.getPetId());
-			pickedPet.setPetName(petDTO.getPetName());
-			pickedPet.setPetStatus(petDTO.getPetStatus());
-			Pet petUpdate = new ModelMapper().map(pickedPet, Pet.class);
-			petRepo.save(petUpdate);
 
-			return pickedPet;
-		
-		} else {
-			throw new MethodArgumentNotValidEx("Invalid pet id");
-			
-		}
+		PetDTO pickedPet = getPetById(id);
+		pickedPet.setPetId(petDTO.getPetId());
+		pickedPet.setPetName(petDTO.getPetName());
+		pickedPet.setPetStatus(petDTO.getPetStatus());
+		Pet petUpdate = new ModelMapper().map(pickedPet, Pet.class);
+		petRepo.save(petUpdate);
 
-		
+		return pickedPet;
 
 	}
-	
+
 	public void deletePet(String petId) throws ResourceNotFoundException, MethodArgumentNotValidEx {
 		if (petId.matches("\\d+")) {
 			Long longPetId = Long.parseLong(petId);
@@ -133,15 +127,15 @@ public class PetStoreService {
 	public PhotoDTO getPetPhotoById(String petId, String photoId)
 			throws ResourceNotFoundException, MethodArgumentNotValidEx {
 		PetDTO pickedPet = getPetById(petId);
-		
+
 		if (photoId.matches("\\d+")) {
 			Long longPhotoId = Long.parseLong(photoId);
 			return convertToPhotoDTO(petPhotoRepo.findByPetIdAndPhotoId(pickedPet.getPetId(), longPhotoId)
 					.orElseThrow(() -> new ResourceNotFoundException("Photo not found")));
-			
+
 		} else {
 			throw new MethodArgumentNotValidEx("Invalid pet photo id");
-			
+
 		}
 
 	}
