@@ -46,7 +46,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 	
 	@ExceptionHandler(NumberFormatException.class)
 	public ResponseEntity<Object> handleNumberFormat(NumberFormatException ex, WebRequest request) {
-		ErrorDetails errorDetails = new ErrorDetails(HttpStatus.BAD_REQUEST.value(), BAD_REQUEST, ex.getMessage());
+		ErrorDetails errorDetails = new ErrorDetails(HttpStatus.BAD_REQUEST.value(), BAD_REQUEST, "Invalid id value");
 		return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
 	}
 
