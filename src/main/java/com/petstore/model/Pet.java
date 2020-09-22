@@ -12,7 +12,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 
-import com.petstore.exception.Enum;
+import com.petstore.validator.CustomEnumAnnotation;
 
 @Entity
 @Table(name = "Pet")
@@ -41,7 +41,7 @@ public class Pet {
 	
 	@Column(name = "pet_status")
 	//@NotBlank(message = "Please insert status")
-	@Enum(enumClass=Status.class, ignoreCase=true)
+	@CustomEnumAnnotation(enumClass=Status.class, ignoreCase=true)
 	private String petStatus;
 	
 	public Pet() {}
