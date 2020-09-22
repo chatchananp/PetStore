@@ -51,6 +51,13 @@ public class PetStoreService {
 				.orElseThrow(() -> new ResourceNotFoundException("Pet not found for this id : " + longPetId)));
 
 	}
+	
+	public Pet getPetInDbById(String petId) throws ResourceNotFoundException {
+		Long longPetId = Long.parseLong(petId);
+		return (petRepo.findById(longPetId)
+				.orElseThrow(() -> new ResourceNotFoundException("Pet not found for this id : " + longPetId)));
+
+	}
 
 	public List<PetDTO> getPetByStatus(String status) throws ResourceNotFoundException, MethodArgumentNotValidEx {
 		if (status.matches("available|pending|sold")) {
