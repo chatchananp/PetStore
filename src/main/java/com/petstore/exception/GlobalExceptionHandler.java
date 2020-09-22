@@ -33,21 +33,19 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 	@Override
 	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
-		ErrorDetails errorDetails = new ErrorDetails(HttpStatus.BAD_REQUEST.value(), BAD_REQUEST,
-				ex.getLocalizedMessage());
+		ErrorDetails errorDetails = new ErrorDetails(HttpStatus.BAD_REQUEST.value(), BAD_REQUEST, ex.getMessage());
 		return new ResponseEntity<Object>(errorDetails, HttpStatus.BAD_REQUEST);
 	}
 	
 	@ExceptionHandler(ValidationException.class)
 	protected ResponseEntity<Object> handleValidationException(ValidationException ex, WebRequest request) {
-		ErrorDetails errorDetails = new ErrorDetails(HttpStatus.METHOD_NOT_ALLOWED.value(), "Method not allowed",
-				"Validation Exception");
+		ErrorDetails errorDetails = new ErrorDetails(HttpStatus.METHOD_NOT_ALLOWED.value(), "Method not allowed", ex.getMessage());
 		return new ResponseEntity<Object>(errorDetails, HttpStatus.METHOD_NOT_ALLOWED);
 	}
 	
 	@ExceptionHandler(NumberFormatException.class)
 	public ResponseEntity<Object> handleNumberFormat(NumberFormatException ex, WebRequest request) {
-		ErrorDetails errorDetails = new ErrorDetails(HttpStatus.BAD_REQUEST.value(), BAD_REQUEST, "Invalid input");
+		ErrorDetails errorDetails = new ErrorDetails(HttpStatus.BAD_REQUEST.value(), BAD_REQUEST, ex.getMessage());
 		return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
 	}
 
@@ -61,8 +59,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 	protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
 
-		ErrorDetails errorDetails = new ErrorDetails(HttpStatus.BAD_REQUEST.value(), BAD_REQUEST,
-				ex.getCause().toString());
+		ErrorDetails errorDetails = new ErrorDetails(HttpStatus.BAD_REQUEST.value(), BAD_REQUEST, ex.getCause().toString());
 		return new ResponseEntity<Object>(errorDetails, HttpStatus.BAD_REQUEST);
 	}
 }
