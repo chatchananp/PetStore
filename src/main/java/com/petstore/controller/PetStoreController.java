@@ -54,8 +54,7 @@ public class PetStoreController {
 	}
 
 	@PutMapping("/pet")
-	public ResponseEntity<String> updatePetByPut(@Valid @RequestBody PetDTO petDTO)
-			throws ResourceNotFoundException, MethodArgumentNotValidEx {
+	public ResponseEntity<String> updatePetByPut(@Valid @RequestBody PetDTO petDTO) {
 		petStoreService.updatePetByPut(petDTO);
 		return ResponseEntity.ok("Update pet successful");
 	}
