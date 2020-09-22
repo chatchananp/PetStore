@@ -1,14 +1,14 @@
-package com.petstore.exception;
+package com.petstore.validator;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
  
-public class EnumValueValidator implements ConstraintValidator<Enum, String>
+public class EnumValueValidator implements ConstraintValidator<CustomEnumAnnotation, String>
 {
-    private Enum annotation;
+    private CustomEnumAnnotation annotation;
  
     @Override
-    public void initialize(Enum annotation)
+    public void initialize(CustomEnumAnnotation annotation)
     {
         this.annotation = annotation;
     }

@@ -1,4 +1,4 @@
-package com.petstore.exception;
+package com.petstore.validator;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -13,7 +13,7 @@ import javax.validation.Payload;
 @Constraint(validatedBy = {EnumValueValidator.class})
 @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Enum
+public @interface CustomEnumAnnotation
 {
     public abstract String message() default "Invalid status value";
      
