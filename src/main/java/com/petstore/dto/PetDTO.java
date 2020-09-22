@@ -6,7 +6,7 @@ import javax.validation.constraints.NotBlank;
 
 import com.petstore.model.PetPhoto;
 
-import com.petstore.exception.Enum;
+import com.petstore.validator.CustomEnumAnnotation;
 
 public class PetDTO {
 	private Long petId;
@@ -21,7 +21,7 @@ public class PetDTO {
 	}
 	
 	//@NotBlank(message = "Please insert pet status")
-	@Enum(enumClass=Status.class, ignoreCase=true)
+	@CustomEnumAnnotation(enumClass=Status.class, ignoreCase=true)
 	private String petStatus;
 
 	public Long getPetId() {
