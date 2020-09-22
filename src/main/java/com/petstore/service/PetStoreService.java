@@ -92,9 +92,11 @@ public class PetStoreService {
 		petRepo.save(pickedPet);
 	}
 
-	public void deletePet(String petId) {
+	public void deletePet(String petId) throws ResourceNotFoundException {
 		Long longPetId = Long.parseLong(petId);
-		petRepo.deleteById(longPetId);
+		Pet pickedPet = petRepo.findById(longPetId)
+				.orElseThrow(() -> new ResourceNotFoundException("Pet not found for this id : " + longPetId));
+		petRepo.delete(pickedPet);
 
 	}
 

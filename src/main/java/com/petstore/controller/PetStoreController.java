@@ -85,7 +85,7 @@ public class PetStoreController {
 	}
 
 	@DeleteMapping("/pet/{id}")
-	public ResponseEntity<String> deletePet(@PathVariable(name = "id") String petId) {
+	public ResponseEntity<String> deletePet(@PathVariable(name = "id") String petId) throws ResourceNotFoundException {
 		petStoreService.deletePet(petId);
 		return ResponseEntity.ok("Delete pet successful");
 	}
