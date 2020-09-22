@@ -63,11 +63,4 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 		ErrorDetails errorDetails = new ErrorDetails(HttpStatus.BAD_REQUEST.value(), BAD_REQUEST, ex.getCause().toString());
 		return new ResponseEntity<Object>(errorDetails, HttpStatus.BAD_REQUEST);
 	}
-	
-	@ExceptionHandler(EmptyResultDataAccessException.class)
-	public ResponseEntity<?> handleEmptyResultDataAccess(EmptyResultDataAccessException ex, WebRequest request) {
-
-		ErrorDetails errorDetails = new ErrorDetails(HttpStatus.NOT_FOUND.value(), "Not Found", ex.getMessage());
-		return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
-	}
 }
