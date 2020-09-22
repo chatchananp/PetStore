@@ -77,9 +77,7 @@ public class PetStoreService {
 	}
 
 	public void updatePetByPost(String petId, PetDTO petDTO) throws ResourceNotFoundException {
-		Long longPetId = Long.parseLong(petId);
-		Pet pickedPet = petRepo.findById(longPetId)
-				.orElseThrow(() -> new ResourceNotFoundException("Pet not found for this id : " + longPetId));
+		Pet pickedPet = getPetInDbById(petId);
 
 		pickedPet.setPetId(petDTO.getPetId());
 		pickedPet.setPetName(petDTO.getPetName());
