@@ -72,17 +72,16 @@ public class PetStoreService {
 		}
 
 	}
-
-	public void updatePetByPost(String petId, PetDTO petDTO)
-			throws ResourceNotFoundException, MethodArgumentNotValidEx {
-		PetDTO pickedPet = getPetById(petId);
-
+	
+	public void updatePetByPost(String petId, PetDTO petDTO) {
+		Long longPetId = Long.parseLong(petId);
+		Pet pickedPet = petRepo.findById(longPetId).get();
+		
 		pickedPet.setPetId(petDTO.getPetId());
 		pickedPet.setPetName(petDTO.getPetName());
 		pickedPet.setPetStatus(petDTO.getPetStatus());
-		Pet petUpdate = new ModelMapper().map(pickedPet, Pet.class);
-		petRepo.save(petUpdate);
-
+		
+		petRepo.save(pickedPet);
 	}
 
 	public void updatePetByPut(PetDTO petDTO) throws ResourceNotFoundException, MethodArgumentNotValidEx {
