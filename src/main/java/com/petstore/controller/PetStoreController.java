@@ -70,8 +70,7 @@ public class PetStoreController {
 
 	@PostMapping(value = "/pet/{id}/uploadImage")
 	public ResponseEntity<String> uploadPhoto(@RequestParam("file") MultipartFile file,
-			@PathVariable(name = "id") String petId)
-			throws IOException, ResourceNotFoundException, MethodArgumentNotValidEx {
+			@PathVariable(name = "id") String petId) throws IOException {
 		petStoreService.uploadPhoto(file, petId);
 		return ResponseEntity.ok("Upload photo successful");
 	}
@@ -86,8 +85,7 @@ public class PetStoreController {
 	}
 
 	@DeleteMapping("/pet/{id}")
-	public ResponseEntity<String> deletePet(@PathVariable(name = "id") String petId)
-			throws ResourceNotFoundException, MethodArgumentNotValidEx {
+	public ResponseEntity<String> deletePet(@PathVariable(name = "id") String petId) {
 		petStoreService.deletePet(petId);
 		return ResponseEntity.ok("Delete pet successful");
 	}

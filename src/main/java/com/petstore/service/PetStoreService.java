@@ -96,11 +96,10 @@ public class PetStoreService {
 
 	}
 
-	public void uploadPhoto(MultipartFile file, String petId)
-			throws IOException, ResourceNotFoundException, MethodArgumentNotValidEx {
-		PetDTO pickedPet = getPetById(petId);
+	public void uploadPhoto(MultipartFile file, String petId) throws IOException {
+		Long longPetId = Long.parseLong(petId);
 
-		PetPhoto photoFile = new PetPhoto(file.getBytes(), pickedPet.getPetId());
+		PetPhoto photoFile = new PetPhoto(file.getBytes(), longPetId);
 		petPhotoRepo.save(photoFile);
 
 	}
