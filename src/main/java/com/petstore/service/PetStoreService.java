@@ -52,13 +52,6 @@ public class PetStoreService {
 
 	}
 	
-	public Pet getPetInDbById(String petId) throws ResourceNotFoundException {
-		Long longPetId = Long.parseLong(petId);
-		return (petRepo.findById(longPetId)
-				.orElseThrow(() -> new ResourceNotFoundException("Pet not found for this id : " + longPetId)));
-
-	}
-	
 	public Pet getPetInDbById(Long petId) throws ResourceNotFoundException {
 		return (petRepo.findById(petId)
 				.orElseThrow(() -> new ResourceNotFoundException("Pet not found for this id : " + petId)));
@@ -83,7 +76,8 @@ public class PetStoreService {
 	}
 
 	public void updatePetByPost(String petId, PetDTO petDTO) throws ResourceNotFoundException {
-		Pet pickedPet = getPetInDbById(petId);
+		Long longPetId = Long.parseLong(petId);
+		Pet pickedPet = getPetInDbById(longPetId);
 
 		pickedPet.setPetId(petDTO.getPetId());
 		pickedPet.setPetName(petDTO.getPetName());
