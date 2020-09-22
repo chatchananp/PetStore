@@ -70,7 +70,7 @@ public class PetStoreController {
 
 	@PostMapping(value = "/pet/{id}/uploadImage")
 	public ResponseEntity<String> uploadPhoto(@RequestParam("file") MultipartFile file,
-			@PathVariable(name = "id") String petId) throws IOException {
+			@PathVariable(name = "id") String petId) throws IOException, ResourceNotFoundException {
 		petStoreService.uploadPhoto(file, petId);
 		return ResponseEntity.ok("Upload photo successful");
 	}

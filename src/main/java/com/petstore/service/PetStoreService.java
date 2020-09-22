@@ -100,10 +100,12 @@ public class PetStoreService {
 
 	}
 
-	public void uploadPhoto(MultipartFile file, String petId) throws IOException {
+	public void uploadPhoto(MultipartFile file, String petId) throws IOException, ResourceNotFoundException {
 		Long longPetId = Long.parseLong(petId);
-
-		PetPhoto photoFile = new PetPhoto(file.getBytes(), longPetId);
+		Pet pickedPet = petRepo.findById(longPetId)
+				.orElseThrow(() -> new ResourceNotFoundException("Pet not found for this id : " + longPetId));
+		
+		PetPhoto photoFile = new PetPhoto(file.getBytes(), pickedPet.getPetId());
 		petPhotoRepo.save(photoFile);
 
 	}
@@ -117,22 +119,6 @@ public class PetStoreService {
 				.orElseThrow(() -> new ResourceNotFoundException("Photo not found")));
 
 	}
-
-//	public PhotoDTO getPetPhotoById(String petId, String photoId)
-//			throws ResourceNotFoundException, MethodArgumentNotValidEx {
-//		PetDTO pickedPet = getPetById(petId);
-//
-//		if (photoId.matches("\\d+")) {
-//			Long longPhotoId = Long.parseLong(photoId);
-//			return convertToPhotoDTO(petPhotoRepo.findByPetIdAndPhotoId(pickedPet.getPetId(), longPhotoId)
-//					.orElseThrow(() -> new ResourceNotFoundException("Photo not found")));
-//
-//		} else {
-//			throw new MethodArgumentNotValidEx("Invalid pet photo id");
-//
-//		}
-//
-//	}
 
 	private PetDTO convertToPetDTO(Pet pet) {
 		modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE);
