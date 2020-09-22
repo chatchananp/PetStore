@@ -69,9 +69,10 @@ public class PetStoreService {
 
 	}
 
-	public void updatePetByPost(String petId, PetDTO petDTO) {
+	public void updatePetByPost(String petId, PetDTO petDTO) throws ResourceNotFoundException {
 		Long longPetId = Long.parseLong(petId);
-		Pet pickedPet = petRepo.findById(longPetId).get();
+		Pet pickedPet = petRepo.findById(longPetId)
+				.orElseThrow(() -> new ResourceNotFoundException("Pet not found for this id : " + petId));
 
 		pickedPet.setPetId(petDTO.getPetId());
 		pickedPet.setPetName(petDTO.getPetName());
@@ -80,8 +81,9 @@ public class PetStoreService {
 		petRepo.save(pickedPet);
 	}
 	
-	public void updatePetByPut(PetDTO petDTO) {
-		Pet pickedPet = petRepo.findById(petDTO.getPetId()).get();
+	public void updatePetByPut(PetDTO petDTO) throws ResourceNotFoundException {
+		Pet pickedPet = petRepo.findById(petDTO.getPetId())
+				.orElseThrow(() -> new ResourceNotFoundException("Pet not found for this id : " + petDTO.getPetId()));
 		
 		pickedPet.setPetId(petDTO.getPetId());
 		pickedPet.setPetName(petDTO.getPetName());

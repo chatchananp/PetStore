@@ -54,14 +54,14 @@ public class PetStoreController {
 	}
 
 	@PutMapping("/pet")
-	public ResponseEntity<String> updatePetByPut(@Valid @RequestBody PetDTO petDTO) {
+	public ResponseEntity<String> updatePetByPut(@Valid @RequestBody PetDTO petDTO) throws ResourceNotFoundException {
 		petStoreService.updatePetByPut(petDTO);
 		return ResponseEntity.ok("Update pet successful");
 	}
 
 	@PostMapping("/pet/{id}")
 	public ResponseEntity<String> updatePetByPost(@PathVariable(name = "id") String petId,
-			@Valid @RequestBody PetDTO petDTO) throws ResourceNotFoundException, MethodArgumentNotValidEx {
+			@Valid @RequestBody PetDTO petDTO) throws ResourceNotFoundException {
 		Long longPetId = Long.parseLong(petId);
 		petDTO.setPetId(longPetId);
 		petStoreService.updatePetByPost(petId, petDTO);
