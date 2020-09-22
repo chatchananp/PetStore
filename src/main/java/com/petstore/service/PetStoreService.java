@@ -51,12 +51,6 @@ public class PetStoreService {
 				.orElseThrow(() -> new ResourceNotFoundException("Pet not found for this id : " + longPetId)));
 
 	}
-	
-	public Pet getPetInDbById(Long petId) throws ResourceNotFoundException {
-		return (petRepo.findById(petId)
-				.orElseThrow(() -> new ResourceNotFoundException("Pet not found for this id : " + petId)));
-
-	}
 
 	public List<PetDTO> getPetByStatus(String status) throws ResourceNotFoundException, MethodArgumentNotValidEx {
 		if (status.matches("available|pending|sold")) {
@@ -121,6 +115,12 @@ public class PetStoreService {
 		
 		return convertToPhotoDTO(petPhotoRepo.findByPetIdAndPhotoId(pickedPet.getPetId(), longPhotoId)
 				.orElseThrow(() -> new ResourceNotFoundException("Photo not found for this photo id: " + longPhotoId)));
+
+	}
+	
+	public Pet getPetInDbById(Long petId) throws ResourceNotFoundException {
+		return (petRepo.findById(petId)
+				.orElseThrow(() -> new ResourceNotFoundException("Pet not found for this id : " + petId)));
 
 	}
 
