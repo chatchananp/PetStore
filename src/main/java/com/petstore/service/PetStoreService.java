@@ -98,8 +98,7 @@ public class PetStoreService {
 
 	public void deletePet(String petId) throws ResourceNotFoundException {
 		Long longPetId = Long.parseLong(petId);
-		Pet pickedPet = petRepo.findById(longPetId)
-				.orElseThrow(() -> new ResourceNotFoundException("Pet not found for this id : " + longPetId));
+		Pet pickedPet = getPetInDbById(longPetId);
 		petRepo.delete(pickedPet);
 
 	}
