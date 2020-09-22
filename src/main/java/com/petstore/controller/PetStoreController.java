@@ -43,7 +43,7 @@ public class PetStoreController {
 
 	@GetMapping(value = "/pet/{id}")
 	public ResponseEntity<PetDTO> getPetById(@PathVariable(name = "id") String petId)
-			throws ResourceNotFoundException, MethodArgumentNotValidEx {
+			throws ResourceNotFoundException {
 		return ResponseEntity.ok().body(petStoreService.getPetById(petId));
 	}
 

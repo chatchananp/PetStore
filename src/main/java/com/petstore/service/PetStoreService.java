@@ -45,14 +45,10 @@ public class PetStoreService {
 		return pets;
 	}
 
-	public PetDTO getPetById(String petId) throws ResourceNotFoundException, MethodArgumentNotValidEx {
-		if (petId.matches("\\d+")) {
-			Long longPetId = Long.parseLong(petId);
-			return convertToPetDTO(petRepo.findById(longPetId)
-					.orElseThrow(() -> new ResourceNotFoundException("Pet not found for this id : " + petId)));
-		} else {
-			throw new MethodArgumentNotValidEx("Invalid pet id");
-		}
+	public PetDTO getPetById(String petId) throws ResourceNotFoundException {
+		Long longPetId = Long.parseLong(petId);
+		return convertToPetDTO(petRepo.findById(longPetId)
+				.orElseThrow(() -> new ResourceNotFoundException("Pet not found for this id : " + petId)));
 
 	}
 
@@ -72,15 +68,15 @@ public class PetStoreService {
 		}
 
 	}
-	
+
 	public void updatePetByPost(String petId, PetDTO petDTO) {
 		Long longPetId = Long.parseLong(petId);
 		Pet pickedPet = petRepo.findById(longPetId).get();
-		
+
 		pickedPet.setPetId(petDTO.getPetId());
 		pickedPet.setPetName(petDTO.getPetName());
 		pickedPet.setPetStatus(petDTO.getPetStatus());
-		
+
 		petRepo.save(pickedPet);
 	}
 
