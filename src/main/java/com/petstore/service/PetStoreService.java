@@ -105,8 +105,7 @@ public class PetStoreService {
 
 	public void uploadPhoto(MultipartFile file, String petId) throws IOException, ResourceNotFoundException {
 		Long longPetId = Long.parseLong(petId);
-		Pet pickedPet = petRepo.findById(longPetId)
-				.orElseThrow(() -> new ResourceNotFoundException("Pet not found for this id : " + longPetId));
+		Pet pickedPet = getPetInDbById(longPetId);
 		
 		PetPhoto photoFile = new PetPhoto(file.getBytes(), pickedPet.getPetId());
 		petPhotoRepo.save(photoFile);
