@@ -107,22 +107,32 @@ public class PetStoreService {
 		petPhotoRepo.save(photoFile);
 
 	}
-
+	
 	public PhotoDTO getPetPhotoById(String petId, String photoId)
-			throws ResourceNotFoundException, MethodArgumentNotValidEx {
-		PetDTO pickedPet = getPetById(petId);
-
-		if (photoId.matches("\\d+")) {
-			Long longPhotoId = Long.parseLong(photoId);
-			return convertToPhotoDTO(petPhotoRepo.findByPetIdAndPhotoId(pickedPet.getPetId(), longPhotoId)
-					.orElseThrow(() -> new ResourceNotFoundException("Photo not found")));
-
-		} else {
-			throw new MethodArgumentNotValidEx("Invalid pet photo id");
-
-		}
+			throws ResourceNotFoundException {
+		Long longPetId = Long.parseLong(petId);
+		Long longPhotoId = Long.parseLong(photoId);
+		
+		return convertToPhotoDTO(petPhotoRepo.findByPetIdAndPhotoId(longPetId, longPhotoId)
+				.orElseThrow(() -> new ResourceNotFoundException("Photo not found")));
 
 	}
+
+//	public PhotoDTO getPetPhotoById(String petId, String photoId)
+//			throws ResourceNotFoundException, MethodArgumentNotValidEx {
+//		PetDTO pickedPet = getPetById(petId);
+//
+//		if (photoId.matches("\\d+")) {
+//			Long longPhotoId = Long.parseLong(photoId);
+//			return convertToPhotoDTO(petPhotoRepo.findByPetIdAndPhotoId(pickedPet.getPetId(), longPhotoId)
+//					.orElseThrow(() -> new ResourceNotFoundException("Photo not found")));
+//
+//		} else {
+//			throw new MethodArgumentNotValidEx("Invalid pet photo id");
+//
+//		}
+//
+//	}
 
 	private PetDTO convertToPetDTO(Pet pet) {
 		modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE);

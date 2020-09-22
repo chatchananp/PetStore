@@ -77,7 +77,7 @@ public class PetStoreController {
 
 	@GetMapping(value = "/pet/{id}/photo/{photoId}")
 	public ResponseEntity<byte[]> getPetPhotoById(@PathVariable(name = "id") String petId,
-			@PathVariable(name = "photoId") String photoId) throws ResourceNotFoundException, MethodArgumentNotValidEx {
+			@PathVariable(name = "photoId") String photoId) throws ResourceNotFoundException {
 
 		PhotoDTO petPhoto = petStoreService.getPetPhotoById(petId, photoId);
 		return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(petPhoto.getPetPhotoData());
