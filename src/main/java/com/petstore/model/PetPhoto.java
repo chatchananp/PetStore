@@ -2,10 +2,12 @@ package com.petstore.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -18,14 +20,17 @@ public class PetPhoto {
 	@Lob @Column(name = "photo_data")
 	private byte[] petPhotoData;
 	
-	@Column(name = "pet_id")
-	private Long petId;
+//	@Column(name = "pet_id")
+//	private Long petId;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	private Pet pet;
 	
 	public PetPhoto() {}
 	
-	public PetPhoto(byte[] petPhotoData, Long petId) {
+	public PetPhoto(byte[] petPhotoData, Pet pet) {
 		this.petPhotoData = petPhotoData;
-		this.petId = petId;
+		this.pet = pet;
 	}
 	
 	public Long getPhotoId() {
@@ -44,11 +49,12 @@ public class PetPhoto {
 		this.petPhotoData = petPhotoData;
 	}
 
-	public Long getPetId() {
-		return petId;
+	public Pet getPet() {
+		return pet;
 	}
 
-	public void setPetId(Long petId) {
-		this.petId = petId;
+	public void setPet(Pet pet) {
+		this.pet = pet;
 	}
+	
 }

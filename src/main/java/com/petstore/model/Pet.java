@@ -7,7 +7,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
@@ -15,7 +14,7 @@ import javax.validation.constraints.NotBlank;
 import com.petstore.validator.CustomEnumAnnotation;
 
 @Entity
-@Table(name = "Pet")
+@Table(name = "pet")
 public class Pet {
 
 	@Id
@@ -27,8 +26,7 @@ public class Pet {
 	@NotBlank(message = "Please insert pet name")
 	private String petName;
 	
-	@OneToMany(cascade = CascadeType.ALL)
-	@JoinColumn(name = "pet_id", referencedColumnName = "pet_id")
+	@OneToMany(mappedBy = "pet", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<PetPhoto> petPhotos;
 
 	public List<PetPhoto> getPetPhotos() {
@@ -40,7 +38,6 @@ public class Pet {
 	}
 	
 	@Column(name = "pet_status")
-	//@NotBlank(message = "Please insert status")
 	@CustomEnumAnnotation(enumClass=Status.class, ignoreCase=true)
 	private String petStatus;
 	
@@ -70,5 +67,13 @@ public class Pet {
 	}
 	public void setPetStatus(String petStatus) {
 		this.petStatus = petStatus;
+	}
+	public void addPhoto(PetPhoto photo) {
+		petPhotos.add(photo);
+		photo.setPet(this);
+	}
+	public void removePhoto(PetPhoto photo) {
+		petPhotos.remove(photo);
+		photo.setPet(null);
 	}
 }
