@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
@@ -26,12 +27,9 @@ public class Pet {
 	@NotBlank(message = "Please insert pet name")
 	private String petName;
 	
-	@OneToMany(mappedBy = "pet", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name = "pet_id", referencedColumnName = "pet_id")
 	private List<PetPhoto> petPhotos;
-
-	public List<PetPhoto> getPetPhotos() {
-		return petPhotos;
-	}
 	
 	public enum Status {
 		available, pending, sold
@@ -68,12 +66,12 @@ public class Pet {
 	public void setPetStatus(String petStatus) {
 		this.petStatus = petStatus;
 	}
-	public void addPhoto(PetPhoto photo) {
-		petPhotos.add(photo);
-		photo.setPet(this);
+
+	public List<PetPhoto> getPetPhotos() {
+		return petPhotos;
 	}
-	public void removePhoto(PetPhoto photo) {
-		petPhotos.remove(photo);
-		photo.setPet(null);
+	
+	public void setPetPhotos(List<PetPhoto> petPhotos) {
+		this.petPhotos = petPhotos;
 	}
 }

@@ -101,7 +101,7 @@ public class PetStoreService {
 		Long longPetId = Long.parseLong(petId);
 		Pet pickedPet = getPetInDbById(longPetId);
 		
-		PetPhoto photoFile = new PetPhoto(file.getBytes(), pickedPet);
+		PetPhoto photoFile = new PetPhoto(file.getBytes(), pickedPet.getPetId());
 		petPhotoRepo.save(photoFile);
 
 	}
@@ -113,7 +113,7 @@ public class PetStoreService {
 		
 		Long longPhotoId = Long.parseLong(photoId);
 		
-		return convertToPhotoDTO(petPhotoRepo.findByPetAndPhotoId(pickedPet, longPhotoId)
+		return convertToPhotoDTO(petPhotoRepo.findByPhotoIdAndPetId(longPhotoId, pickedPet.getPetId())
 				.orElseThrow(() -> new ResourceNotFoundException("Photo not found for this photo id: " + longPhotoId)));
 
 	}
