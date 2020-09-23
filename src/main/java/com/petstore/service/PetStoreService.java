@@ -29,6 +29,8 @@ public class PetStoreService {
 	private PetPhotoRepository petPhotoRepo;
 	@Autowired
 	private ModelMapper modelMapper;
+	
+	private static final String PET_NOT_FOUND = "Pet not found for this id : ";
 
 	public void addPet(PetDTO petDTO) {
 		Pet pet = new ModelMapper().map(petDTO, Pet.class);
@@ -47,7 +49,8 @@ public class PetStoreService {
 	
 	public PetDTO getPetById(String petId) throws ResourceNotFoundException {
 		Long longPetId = Long.parseLong(petId);
-		return convertToPetDTO(getPetInDbById(longPetId));
+		return convertToPetDTO(petRepo.findById(longPetId)
+				.orElseThrow(() -> new ResourceNotFoundException(PET_NOT_FOUND + longPetId)));
 
 	}
 
@@ -70,7 +73,8 @@ public class PetStoreService {
 
 	public void updatePetByPost(String petId, PetDTO petDTO) throws ResourceNotFoundException {
 		Long longPetId = Long.parseLong(petId);
-		Pet pickedPet = getPetInDbById(longPetId);
+		Pet pickedPet = petRepo.findById(longPetId)
+				.orElseThrow(() -> new ResourceNotFoundException(PET_NOT_FOUND + longPetId + " to update."));
 
 		pickedPet.setPetId(petDTO.getPetId());
 		pickedPet.setPetName(petDTO.getPetName());
@@ -80,7 +84,8 @@ public class PetStoreService {
 	}
 	
 	public void updatePetByPut(PetDTO petDTO) throws ResourceNotFoundException {
-		Pet pickedPet = getPetInDbById(petDTO.getPetId());
+		Pet pickedPet = petRepo.findById(petDTO.getPetId())
+				.orElseThrow(() -> new ResourceNotFoundException(PET_NOT_FOUND + petDTO.getPetId() + " to update."));
 		
 		pickedPet.setPetId(petDTO.getPetId());
 		pickedPet.setPetName(petDTO.getPetName());
@@ -91,14 +96,16 @@ public class PetStoreService {
 
 	public void deletePet(String petId) throws ResourceNotFoundException {
 		Long longPetId = Long.parseLong(petId);
-		Pet pickedPet = getPetInDbById(longPetId);
+		Pet pickedPet = petRepo.findById(longPetId)
+				.orElseThrow(() -> new ResourceNotFoundException(PET_NOT_FOUND + longPetId + " to delete."));
 		petRepo.delete(pickedPet);
 
 	}
 
 	public void uploadPhoto(MultipartFile file, String petId) throws IOException, ResourceNotFoundException {
 		Long longPetId = Long.parseLong(petId);
-		Pet pickedPet = getPetInDbById(longPetId);
+		Pet pickedPet = petRepo.findById(longPetId)
+				.orElseThrow(() -> new ResourceNotFoundException(PET_NOT_FOUND + longPetId + " to upload photo."));
 		
 		PetPhoto photoFile = new PetPhoto(file.getBytes(), pickedPet.getPetId());
 		petPhotoRepo.save(photoFile);
@@ -108,18 +115,13 @@ public class PetStoreService {
 	public PhotoDTO getPetPhotoById(String petId, String photoId)
 			throws ResourceNotFoundException {
 		Long longPetId = Long.parseLong(petId);
-		Pet pickedPet = getPetInDbById(longPetId);
+		Pet pickedPet = petRepo.findById(longPetId)
+				.orElseThrow(() -> new ResourceNotFoundException(PET_NOT_FOUND + longPetId + " to get a photo."));
 		
 		Long longPhotoId = Long.parseLong(photoId);
 		
 		return convertToPhotoDTO(petPhotoRepo.findByPhotoIdAndPetId(longPhotoId, pickedPet.getPetId())
 				.orElseThrow(() -> new ResourceNotFoundException("Photo not found for this photo id: " + longPhotoId)));
-
-	}
-	
-	public Pet getPetInDbById(Long petId) throws ResourceNotFoundException {
-		return (petRepo.findById(petId)
-				.orElseThrow(() -> new ResourceNotFoundException("Pet not found for this id : " + petId)));
 
 	}
 
