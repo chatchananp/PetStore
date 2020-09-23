@@ -4,8 +4,6 @@ import java.util.List;
 
 import javax.validation.constraints.NotBlank;
 
-import com.petstore.model.PetPhoto;
-
 import com.petstore.validator.CustomEnumAnnotation;
 
 public class PetDTO {
@@ -14,13 +12,12 @@ public class PetDTO {
 	@NotBlank(message = "Please insert pet name")
 	private String petName;
 	
-	private List<PetPhoto> petPhotos;
+	private List<PhotoDTO> petPhotos;
 	
 	public enum Status {
 		available, pending, sold
 	}
 	
-	//@NotBlank(message = "Please insert pet status")
 	@CustomEnumAnnotation(enumClass=Status.class, ignoreCase=true)
 	private String petStatus;
 
@@ -40,11 +37,11 @@ public class PetDTO {
 		this.petName = petName;
 	}
 
-	public List<PetPhoto> getPetPhotos() {
+	public List<PhotoDTO> getPetPhotos() {
 		return petPhotos;
 	}
 
-	public void setPetPhotos(List<PetPhoto> petPhotos) {
+	public void setPetPhotos(List<PhotoDTO> petPhotos) {
 		this.petPhotos = petPhotos;
 	}
 
