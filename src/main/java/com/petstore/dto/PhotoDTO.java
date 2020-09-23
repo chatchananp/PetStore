@@ -1,9 +1,11 @@
 package com.petstore.dto;
 
+import com.petstore.model.Pet;
+
 public class PhotoDTO {
 	private Long photoId;
 	private byte[] petPhotoData;
-	private Long petId;
+	private Pet pet;
 	
 	public Long getPhotoId() {
 		return photoId;
@@ -21,12 +23,12 @@ public class PhotoDTO {
 		this.petPhotoData = petPhotoData;
 	}
 	
-	public Long getPetId() {
-		return petId;
+	public Pet getPet() {
+		return pet;
 	}
 	
-	public void setPetId(Long petId) {
-		this.petId = petId;
+	public void setPet(Pet pet) {
+		this.pet = pet;
 	}
 	
 }
