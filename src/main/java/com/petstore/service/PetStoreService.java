@@ -44,11 +44,10 @@ public class PetStoreService {
 
 		return pets;
 	}
-
+	
 	public PetDTO getPetById(String petId) throws ResourceNotFoundException {
 		Long longPetId = Long.parseLong(petId);
-		return convertToPetDTO(petRepo.findById(longPetId)
-				.orElseThrow(() -> new ResourceNotFoundException("Pet not found for this id : " + longPetId)));
+		return convertToPetDTO(getPetInDbById(longPetId));
 
 	}
 
