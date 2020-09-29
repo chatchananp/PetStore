@@ -1,6 +1,7 @@
 package com.petstore.model;
 
 import java.util.List;
+import java.util.UUID;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -40,6 +41,9 @@ public class Pet {
 	@CustomEnumAnnotation(enumClass=Status.class, ignoreCase=true)
 	private String petStatus;
 	
+	@Column(name = "pet_rand_id")
+	private UUID petRandomId;
+	
 	public Pet() {}
 	
 	public Pet(String petName, String petStatus) {
@@ -74,6 +78,14 @@ public class Pet {
 	
 	public void setPetPhotos(List<PetPhoto> petPhotos) {
 		this.petPhotos = petPhotos;
+	}
+
+	public UUID getPetRandomId() {
+		return petRandomId;
+	}
+
+	public void setPetRandomId(UUID petRandomId) {
+		this.petRandomId = petRandomId;
 	}
 	
 }
