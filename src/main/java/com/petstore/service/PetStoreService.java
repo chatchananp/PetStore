@@ -2,6 +2,7 @@ package com.petstore.service;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
@@ -32,6 +33,7 @@ public class PetStoreService {
 	private static final String PET_NOT_FOUND = "Pet not found for this id : ";
 
 	public void addPet(PetDTO petDTO) {
+		petDTO.setPetRandomId(UUID.randomUUID());
 		Pet pet = new ModelMapper().map(petDTO, Pet.class);
 		petRepo.save(pet);
 	}
