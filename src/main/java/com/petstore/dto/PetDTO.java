@@ -52,5 +52,7 @@ public class PetDTO {
 	public void setPetStatus(String petStatus) {
 		this.petStatus = petStatus;
 	}
+
+	
 	
 }

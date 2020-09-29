@@ -1,8 +1,12 @@
 package com.petstore.controller;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +21,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import org.supercsv.io.CsvBeanWriter;
+import org.supercsv.io.ICsvBeanWriter;
+import org.supercsv.prefs.CsvPreference;
 
 import com.petstore.dto.PetDTO;
 import com.petstore.dto.PhotoDTO;
@@ -42,8 +49,7 @@ public class PetStoreController {
 	}
 
 	@GetMapping(value = "/pet/{id}")
-	public ResponseEntity<PetDTO> getPetById(@PathVariable(name = "id") String petId)
-			throws ResourceNotFoundException {
+	public ResponseEntity<PetDTO> getPetById(@PathVariable(name = "id") String petId) throws ResourceNotFoundException {
 		return ResponseEntity.ok().body(petStoreService.getPetById(petId));
 	}
 
@@ -88,5 +94,31 @@ public class PetStoreController {
 	public ResponseEntity<String> deletePet(@PathVariable(name = "id") String petId) throws ResourceNotFoundException {
 		petStoreService.deletePet(petId);
 		return ResponseEntity.ok("Delete pet successful");
+	}
+
+	@GetMapping("/pet/csv")
+	public void exportToCSV(HttpServletResponse response) throws IOException, ResourceNotFoundException {
+		response.setContentType("text/csv");
+		DateFormat dateFormatter = new SimpleDateFormat("dd-MM-yyyy_HH-mm-ss");
+		String currentDateTime = dateFormatter.format(new Date());
+
+		String filename = "pets_data_at_" + currentDateTime + ".csv";
+		String headerKey = "Content-Disposition";
+		String headerValue = "attachment; filename=" + filename;
+		response.setHeader(headerKey, headerValue);
+
+		List<PetDTO> listPets = petStoreService.getAllPet();
+
+		ICsvBeanWriter csvWriter = new CsvBeanWriter(response.getWriter(), CsvPreference.STANDARD_PREFERENCE);
+		String[] csvHeader = { "id", "name", "status" };
+		String[] nameMapping = { "petId", "petName", "petStatus" };
+
+		csvWriter.writeHeader(csvHeader);
+
+		for (PetDTO pet : listPets) {
+			csvWriter.write(pet, nameMapping);
+		}
+
+		csvWriter.close();
 	}
 }
