@@ -1,6 +1,7 @@
 package com.petstore.dto;
 
 import java.util.List;
+import java.util.UUID;
 
 import javax.validation.constraints.NotBlank;
 
@@ -20,6 +21,8 @@ public class PetDTO {
 	
 	@CustomEnumAnnotation(enumClass=Status.class, ignoreCase=true)
 	private String petStatus;
+	
+	private UUID petRandomId;
 
 	public Long getPetId() {
 		return petId;
@@ -51,6 +54,14 @@ public class PetDTO {
 
 	public void setPetStatus(String petStatus) {
 		this.petStatus = petStatus;
+	}
+
+	public UUID getPetRandomId() {
+		return petRandomId;
+	}
+
+	public void setPetRandomId(UUID petRandomId) {
+		this.petRandomId = petRandomId;
 	}
 
 	
