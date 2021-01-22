@@ -97,7 +97,7 @@ public class PetStoreController {
 	}
 
 	@GetMapping("/pet/csv")
-	public void exportToCSV(HttpServletResponse response) throws IOException, ResourceNotFoundException {
+	public ResponseEntity<String> exportToCSV(HttpServletResponse response) throws IOException, ResourceNotFoundException {
 		response.setContentType("text/csv");
 		DateFormat dateFormatter = new SimpleDateFormat("dd-MM-yyyy_HH-mm-ss");
 		String currentDateTime = dateFormatter.format(new Date());
@@ -120,5 +120,6 @@ public class PetStoreController {
 		}
 
 		csvWriter.close();
+		return ResponseEntity.ok("get all pet successful");
 	}
 }
